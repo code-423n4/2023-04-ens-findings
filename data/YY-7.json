@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "YY",
+  "risk": "2",
+  "title": "`parseRR()` and `parseString()` miss input validation that may cause out-of-bounds memory access",
+  "issueId": 7,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/7"
+}
