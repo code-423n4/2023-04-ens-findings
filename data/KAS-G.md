@@ -1,4 +1,11 @@
-1: Three ways to reduce gas in DNSClaimChecker.sol
+1: Remove unnecessary code: 
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/utils/NameEncoder.sol#L39
+
+The for loop is used to iterate over each character in the input string name. The loop condition is i >= 0, which means that the loop will continue until i becomes negative. The if (i == 0) { break; } statement appears at the end of the loop and checks whether i has reached zero. If i is zero, the break statement is executed, which terminates the loop. However, the loop condition i >= 0 already ensures that the loop will terminate when i reaches zero, since the loop will not execute for negative values of i. Therefore, the if (i == 0) { break; } statement is redundant and can be safely removed without affecting the behavior of the code.
+Removing this unnecessary code will not affect the output of the function, but it may improve the gas efficiency of the code by eliminating the unnecessary if statement and break statement.
+
+2: Three ways to reduce gas in DNSClaimChecker.sol
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSClaimChecker.sol
 
@@ -6,7 +13,7 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSCl
 -Optimize loop variables: The parseRR function contains a loop that increments the idx variable by 1 and then adds len to it. This can be optimized by incrementing idx by len + 1 in each iteration of the loop.
 -Remove unnecessary variables: The found variable in the parseString function is unnecessary since the function always returns a boolean value. We can remove the found variable and return false directly when the string does not start with "a=0x".
 
-2:Use a single substring function call to extract both the exponent and modulus values from the key input, rather than using separate calls.
+3:Use a single substring function call to extract both the exponent and modulus values from the key input, rather than using separate calls.
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/algorithms/RSASHA1Algorithm.sol
 
 The verify function in the RSASHA1Algorithm contract extracts the exponent and modulus values from the key input using two separate substring function calls:
@@ -41,7 +48,7 @@ Finally, we extract the modulus value by calling substring with the starting pos
 By using a single substring function call instead of two separate calls, we can reduce the number of byte array allocations and potentially save on gas costs.
 
 
-2: Performing elliptic curve operations on the P-256 curve can be computationally expensive and it can be reduce
+4: Performing elliptic curve operations on the P-256 curve can be computationally expensive and it can be reduce
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/algorithms/P256SHA256Algorithm.sol
 
@@ -49,7 +56,7 @@ Elliptic curve operations on the P-256 curve can be computationally expensive, w
 To mitigate this issue, it is important to carefully consider the gas costs of the operations used in the smart contract and take appropriate measures to reduce gas usage where possible. For example, the verify function could potentially be optimized by caching public keys to avoid recomputing the same elliptic curve operations multiple times. Additionally, it may be possible to batch multiple signature verification requests into a single transaction to reduce gas costs.
 It is also important to consider the gas limits of the Ethereum network and ensure that the gas limits for transactions that call the verify function are set appropriately to avoid running out of gas and failing to execute the transaction.
 
-3: Three ways in this contract to save some of gas:
+5: Three ways in this contract to save some of gas:
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/DNSSECImpl.sol
 
 One possible optimization could be to remove the "virtual" modifier from the "verifyRRSet" and "validateSignedSet" functions. This modifier is not necessary, as these functions are not intended to be overridden in derived contracts. Removing it could reduce the gas cost of function calls to these functions.
