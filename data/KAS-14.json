@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "KAS",
+  "risk": "3",
+  "title": " Arbitrary Callback vulnerability in resolveCallback function",
+  "issueId": 14,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/14"
+}
