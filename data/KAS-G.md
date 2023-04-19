@@ -49,3 +49,9 @@ Elliptic curve operations on the P-256 curve can be computationally expensive, w
 To mitigate this issue, it is important to carefully consider the gas costs of the operations used in the smart contract and take appropriate measures to reduce gas usage where possible. For example, the verify function could potentially be optimized by caching public keys to avoid recomputing the same elliptic curve operations multiple times. Additionally, it may be possible to batch multiple signature verification requests into a single transaction to reduce gas costs.
 It is also important to consider the gas limits of the Ethereum network and ensure that the gas limits for transactions that call the verify function are set appropriately to avoid running out of gas and failing to execute the transaction.
 
+3: Three ways in this contract to save some of gas:
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/DNSSECImpl.sol
+
+One possible optimization could be to remove the "virtual" modifier from the "verifyRRSet" and "validateSignedSet" functions. This modifier is not necessary, as these functions are not intended to be overridden in derived contracts. Removing it could reduce the gas cost of function calls to these functions.
+Another optimization could be to store the results of the "algorithms" and "digests" mappings in local variables, rather than accessing them directly in the loop. This could reduce the number of storage reads and gas cost of the loop.
+Additionally, it may be possible to optimize the logic of the "validateSignedSet" function to reduce the number of loops and conditionals. For example, instead of iterating over all the RR records in the set twice (once to calculate the digest and again to verify the signature), it is possible to do both operations in a single loop.
