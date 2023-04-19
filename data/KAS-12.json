@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "KAS",
+  "risk": "3",
+  "title": "'getOwnerAddress' Function May Return Contract Address Instead of Owner's Address for ENS Domains Owned by Contracts",
+  "issueId": 12,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/12"
+}
