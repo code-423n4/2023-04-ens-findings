@@ -6,6 +6,16 @@ RSASHA1 is a cryptographic algorithm that uses the RSA algorithm for digital sig
 In 2005, an attack on SHA-1 was demonstrated that could find collisions with a complexity of 2^69 operations, which was still considered infeasible at the time. However, in 2017, a team of researchers were able to break SHA-1 using a collision attack with a complexity of 2^63 operations, which is within the range of modern computing power.
 As a result of these known vulnerabilities, SHA-1 is no longer considered a secure cryptographic hash function and has been deprecated by NIST (National Institute of Standards and Technology) since 2011. It is recommended to use stronger and more secure hash functions, such as SHA-256 or SHA-3, for digital signatures and other security-related applications.
 
+2: Signature malleability
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/algorithms/P256SHA256Algorithm.sol
+
+Signature malleability is a weakness in some signature schemes where an attacker can modify a valid signature and produce another valid signature for the same message. In the context of this code, an attacker could potentially modify a valid signature and create a new signature that still validates against the same public key and message hash. This could lead to unexpected behavior in the smart contract, as the modified signature could be used to authorize transactions or perform other actions that the original signer did not intend. One common method of addressing signature malleability is to use a normalization procedure that maps each signature to a unique value. For example, in the ECDSA signature scheme, the r value of the signature is normalized by taking the minimum between r and the order of the curve's generator point. This ensures that each signature corresponds to a unique value of r, which helps prevent malleability.
+
+
+
+
+
 
 
 
