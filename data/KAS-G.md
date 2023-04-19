@@ -41,5 +41,11 @@ Finally, we extract the modulus value by calling substring with the starting pos
 By using a single substring function call instead of two separate calls, we can reduce the number of byte array allocations and potentially save on gas costs.
 
 
+2: Performing elliptic curve operations on the P-256 curve can be computationally expensive and it can be reduce
 
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/algorithms/P256SHA256Algorithm.sol
+
+Elliptic curve operations on the P-256 curve can be computationally expensive, which can lead to high gas costs for transactions that call the verify function in this code. This means that if an attacker were to repeatedly call the verify function with malicious inputs, they could potentially cause denial of service attacks by consuming a large amount of gas and preventing other transactions from being processed.
+To mitigate this issue, it is important to carefully consider the gas costs of the operations used in the smart contract and take appropriate measures to reduce gas usage where possible. For example, the verify function could potentially be optimized by caching public keys to avoid recomputing the same elliptic curve operations multiple times. Additionally, it may be possible to batch multiple signature verification requests into a single transaction to reduce gas costs.
+It is also important to consider the gas limits of the Ethereum network and ensure that the gas limits for transactions that call the verify function are set appropriately to avoid running out of gas and failing to execute the transaction.
 
