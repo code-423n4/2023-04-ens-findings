@@ -5,6 +5,13 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/utils/NameEncoder.
 The for loop is used to iterate over each character in the input string name. The loop condition is i >= 0, which means that the loop will continue until i becomes negative. The if (i == 0) { break; } statement appears at the end of the loop and checks whether i has reached zero. If i is zero, the break statement is executed, which terminates the loop. However, the loop condition i >= 0 already ensures that the loop will terminate when i reaches zero, since the loop will not execute for negative values of i. Therefore, the if (i == 0) { break; } statement is redundant and can be safely removed without affecting the behavior of the code.
 Removing this unnecessary code will not affect the output of the function, but it may improve the gas efficiency of the code by eliminating the unnecessary if statement and break statement.
 
+2: dnsEncodeName function calculates the Keccak-256 hash twice, once for the in the loop when the value of i =0 and once after the loop.
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/utils/NameEncoder.sol#L28 & L46
+
+The Keccak-256 hash is calculated inside the loop, while the node hash is calculated outside the loop after the loop has finished iterating over all the characters in the input string name. Since the label hash is already being calculated inside the loop when i =0, it is possible to reuse this value to calculate the node hash, instead of calculating the hash again using bytesName.keccak(0, labelLength). This can be done by storing the label hash in a variable inside the loop, and then using this variable to calculate the node hash after the loop has finished.
+
+By doing this, we can avoid the second hash calculation and reduce gas usage. The modified code would look like this:
 2: Three ways to reduce gas in DNSClaimChecker.sol
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSClaimChecker.sol
