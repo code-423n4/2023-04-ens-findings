@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "KAS",
+  "risk": "2",
+  "title": "Out-of-bounds access and incorrect parsing vulnerability in Solidity record parser library",
+  "issueId": 16,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/16"
+}
