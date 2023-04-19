@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "KAS",
+  "risk": "2",
+  "title": "Proofs Vulnerability in ENS Registrar Contract",
+  "issueId": 17,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/17"
+}
