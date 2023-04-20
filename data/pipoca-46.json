@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "pipoca",
+  "risk": "2",
+  "title": "Potential for stale data in the DNSSEC oracle may lead to incorrect behavior",
+  "issueId": 46,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/46"
+}
