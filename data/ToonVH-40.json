@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "ToonVH",
+  "risk": "2",
+  "title": "DNSSECImpl has an owner that can not be changed nor renounced.",
+  "issueId": 40,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/40"
+}
