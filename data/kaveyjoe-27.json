@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "kaveyjoe",
+  "risk": "2",
+  "title": "Bug in parseString function of DNSClaimChecker library",
+  "issueId": 27,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/27"
+}
