@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "pipoca",
+  "risk": "3",
+  "title": "Front-running proveAndClaim and proveAndClaimWithResolver functions in DNSRegistrar contract",
+  "issueId": 42,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/42"
+}
