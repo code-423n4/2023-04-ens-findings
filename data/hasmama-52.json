@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "hasmama",
+  "risk": "3",
+  "title": "Reentrancy attack vulnerability in OffchainDNSResolver contract",
+  "issueId": 52,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/52"
+}
