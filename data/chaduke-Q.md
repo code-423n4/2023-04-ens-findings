@@ -19,3 +19,7 @@ Mitigation: check the ``OffsetOutOfBoundsError`` case using a requirement statem
         return keccak(self, offset, len) == keccak(other, otherOffset, len);
     }
 ```
+
+QA2. The NatSpec says for ``compare()``: "Returns a positive number if `other` comes lexicographically after `self`, a negative number if it comes before, or zero if the contents of the two bytes are equal.". Acutually, the opposite is true: "Returns a negative number if `other` comes lexicographically after `self`, a positive number if it comes before, or zero if the contents of the two bytes are equal."
+
+[https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L52-L100](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L52-L100)
