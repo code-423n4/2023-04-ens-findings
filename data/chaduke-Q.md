@@ -89,3 +89,17 @@ Mitigation:
         }
     }
 ```
+
+QA7. Here is a typo in the code, "52" should be "32".
+
+[https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L332-L377](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L332-L377)
+
+```diff
+    function base32HexDecodeWord(
+        bytes memory self,
+        uint256 off,
+        uint256 len
+    ) internal pure returns (bytes32) {
+-        require(len <= 52);
++        require(len <= 32);
+```
