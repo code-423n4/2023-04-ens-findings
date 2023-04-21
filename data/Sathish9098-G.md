@@ -1,306 +1,17 @@
- # LOW FINDINGS
+
+# GAS OPTIMIZATION
 
 ##
 
-## [L-1] Loss of precision due to rounding
+## [G-1] State variables should be cached in stack variables rather than re-reading them from storage
 
-```solidity
+> Instances()
 
-```
+> Approximate gas saved: 
 
-```solidity
+Caching will replace each Gwarmaccess (100 gas) with a much cheaper stack read.
+Less obvious fixes/optimizations include having local storage variables of mappings within state variable mappings or mappings within state variable structs, having local storage variables of structs within mappings, having local memory caches of state variable structs, or having local caches of state variable contracts/addresses.
 
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-##
-
-## [L-2] Consider using OpenZeppelin’s SafeCast library to prevent unexpected overflows when casting from uint256
-
-Using the SafeCast library can help prevent unexpected errors in your Solidity code and make your contracts more secure
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-### Recommended Mitigation Steps:
-Consider using OpenZeppelin’s SafeCast library to prevent unexpected overflows when casting from uint256.
-
-##
-
-## [L-3] Vulnerable to cross-chain replay attacks due to static DOMAIN_SEPARATOR/domainSeparator
-
-See this [issue](https://github.com/code-423n4/2021-04-maple-findings/issues/2) from a prior contest for details
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-## [L-4] MIXING AND OUTDATED COMPILER
-
-The pragma version used are: 0.8.0
-
-The minimum required version must be 0.8.17; otherwise, contracts will be affected by the following important bug fixes:
-
-0.8.14:
-
-ABI Encoder: When ABI-encoding values from calldata that contain nested arrays, correctly validate the nested array length against calldatasize() in all cases.
-Override Checker: Allow changing data location for parameters only when overriding external functions.
-
-0.8.15
-
-Code Generation: Avoid writing dirty bytes to storage when copying bytes arrays.
-Yul Optimizer: Keep all memory side-effects of inline assembly blocks.
-
-0.8.16
-
-Code Generation: Fix data corruption that affected ABI-encoding of calldata values represented by tuples: structs at any nesting level; argument lists of external functions, events and errors; return value lists of external functions. The 32 leading bytes of the first dynamically-encoded value in the tuple would get zeroed when the last component contained a statically-encoded array.
-
-0.8.17
-Yul Optimizer: Prevent the incorrect removal of storage writes before calls to Yul functions that conditionally terminate the external EVM call.
-Apart from these, there are several minor bug fixes and improvements
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-##
-
-## [L-5] abi.encodePacked() should not be used with dynamic types when passing the result to a hash function such as keccak256()
-
-Use abi.encode() instead which will pad items to 32 bytes, which will prevent hash collisions (e.g. abi.encodePacked(0x123,0x456) => 0x123456 => abi.encodePacked(0x1,0x23456), but abi.encode(0x123,0x456) => 0x0...1230...456). "Unless there is a compelling reason, abi.encode should be preferred". If there is only one argument to abi.encodePacked() it can often be cast to bytes() or bytes32() instead. If all arguments are strings and or bytes, bytes.concat() should be used instead
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-##
-
-## [L-6] Lack of Sanity/Threshold/Limit Checks
-
-Devoid of sanity/threshold/limit checks, critical parameters can be configured to invalid values, causing a variety of issues and breaking expected interactions within/between contracts. Consider adding proper uint256 validation as well as zero address checks for critical changes. A worst case scenario would render the contract needing to be re-deployed in the event of human/accidental errors that involve value assignments to immutable variables. If the validation procedure is unclear or too complex to implement on-chain, document the potential issues that could produce invalid values
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-##
-
-## [L-7] Function Calls in Loop Could Lead to Denial of Service
-
-Function calls made in unbounded loop are error-prone with potential resource exhaustion as it can trap the contract due to the gas limitations or failed transactions
-
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-##
-
-## [L-8] Use .call instead of .transfer to send ether
-
-.transfer will relay 2300 gas and .call will relay all the gas. If the receive/fallback function from the recipient proxy contract has complex logic, using .transfer will fail, causing integration issues
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-##
-
-## [L-9] Project Upgrade and Stop Scenario should be
-
-At the start of the project, the system may need to be stopped or upgraded, I suggest you have a script beforehand and add it to the documentation. This can also be called an ” EMERGENCY STOP (CIRCUIT BREAKER) PATTERN “.
-
-https://github.com/maxwoe/solidity_patterns/blob/master/security/EmergencyStop.sol
-
-##
-
-## [L-10]  ALLOWS MALLEABLE SECP256K1 SIGNATURES
-
-Here, the ecrecover() method doesn’t check the s range.
-
-Homestead (EIP-2) added this limitation, however the precompile remained unaltered. The majority of libraries, including OpenZeppelin, do this check.
-
-Since an order can only be confirmed once and its hash is saved, there doesn’t seem to be a serious danger in existing use cases
-
-https://github.com/OpenZeppelin/openzeppelin-contracts/blob/7201e6707f6631d9499a569f492870ebdd4133cf/contracts/utils/cryptography/ECDSA.sol#L138-L149
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-##
-
-## [L-11] AVOID HARDCODED VALUES
-
-It is not good practice to hardcode values, but if you are dealing with addresses much less, these can change between implementations, networks or projects, so it is convenient to remove these values from the source code
 
 ```solidity
 
@@ -325,9 +36,40 @@ It is not good practice to hardcode values, but if you are dealing with addresse
 
 ##
 
-## [L-12] Front running attacks by the onlyOwner
+## [G-2] Using storage instead of memory for structs/arrays saves gas
 
-owner value is not a constant value and can be changed with transferOwnership() function, before a function using setOwner state variable value in the project, transferOwnership function can be triggered by onlyOwner and operations can be blocked
+> Instances()
+
+> Approximate gas saved: 
+
+When fetching data from a storage location, assigning the data to a memory variable causes all fields of the struct/array to be read from storage, which incurs a Gcoldsload (2100 gas) for each field of the struct/array. If the fields are read from the new memory variable, they incur an additional MLOAD rather than a cheap stack read. Instead of declearing the variable with the memory keyword, declaring the variable with the storage keyword and caching any fields that need to be re-read in stack variables, will be much cheaper, only incuring the Gcoldsload for the fields actually read. The only time it makes sense to read the whole struct/array into a memory variable, is if the full struct/array is being returned by the function, is being passed to a function that requires memory, or if the array/struct is being read from another memory array/struct
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
+
+53: string[] memory urls = new string[](1);
+
+```
+[OffchainDNSResolver.sol#L53](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L53)
+
+```solidity
+```
+
+```solidity
+```
+
+```solidity
+```
+
+```solidity
+```
+
+## [G-3] Multiple address/ID mappings can be combined into a single mapping of an address/ID to a struct, where appropriate
+
+> Instances()
+> Instances()
+
+Saves a storage slot for the mapping. Depending on the circumstances and sizes of types, can avoid a Gsset (20000 gas) per mapping combined. Reads and subsequent writes can also be cheaper when a function requires both values and they both fit in the same storage slot. Finally, if both fields are accessed in the same function, can save ~42 gas per access due to [not having to recalculate the key’s keccak256 hash](https://gist.github.com/IllIllI000/ec23a57daa30a8f8ca8b9681c8ccefb0) (Gkeccak256 - 30 gas) and that calculation’s associated stack operations.
 
 ```solidity
 
@@ -336,6 +78,38 @@ owner value is not a constant value and can be changed with transferOwnership() 
 ```solidity
 
 ```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+##
+
+## [G-4] For events use 3 indexed rule to save gas
+
+Need to declare 3 indexed fields for event parameters. If the event parameter is less than 3 should declare all event parameters indexed
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
+
+47: event Claim(
+        bytes32 indexed node,
+        address indexed owner,
+        bytes dnsname,
+        uint32 inception
+    );
+53: event NewPublicSuffixList(address suffixes);
+
+```
+[DNSRegistrar.sol#L47-L53](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L47-L53)
 
 ```solidity
 
@@ -357,64 +131,138 @@ owner value is not a constant value and can be changed with transferOwnership() 
 
 ##
 
-## [L-13]
+## [G-5] Lack of input value checks cause a redeployment if any human/accidental errors
 
+> Instances()
 
+Devoid of sanity/threshold/limit checks, critical parameters can be configured to invalid values, causing a variety of issues and breaking expected interactions within/between contracts. Consider adding proper uint256 validation. A worst case scenario would render the contract needing to be re-deployed in the event of human/accidental errors that involve value assignments to immutable variables.
 
+If any human/accidental errors happen need to redeploy the contract so this create the huge gas lose
 
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
 
-# NON CRITICAL FINDINGS
+constructor(ENS _ens, DNSSEC _oracle, string memory _gatewayURL) {
+        ens = _ens;
+        oracle = _oracle;
+        gatewayURL = _gatewayURL;
+    }
+
+```
+[OffchainDNSResolver.sol#L43-L47](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L43-L47)
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
+
+62: previousRegistrar = _previousRegistrar;
+63: resolver = _resolver;
+64: oracle = _dnssec;
+65: suffixes = _suffixes;
+67: ens = _ens;
+```
+[DNSRegistrar.sol#L62-L67](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L62-L67)
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
+
+80: function setPublicSuffixList(PublicSuffixList _suffixes) public onlyOwner {
+        suffixes = _suffixes;
+        emit NewPublicSuffixList(address(suffixes));
+    }
+
+```
+[DNSRegistrar.sol#L80-L83](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L80-L83)
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
 
 ##
 
-## [NC-1] immutable should be uppercase
+## [G-6] Use nested if and, avoid multiple check combinations
 
+> Instances()
 
+> Approximate Gas Saved:  gas
+
+Using nested is cheaper than using && multiple check combinations. There are more advantages, such as easier to read code and better coverage reports.
+
+As per Solidity [reports](https://gist.github.com/sathishpic22/fe96671bafb22ceaace7fc05a66bd115) possible to save 9 gas
+
+```solidity
+FILE: FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
+
+178: if (nameOrAddress[idx] == "0" && nameOrAddress[idx + 1] == "x") {
+
+```
+[OffchainDNSResolver.sol#L178](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L178)
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
 
 
 ##
 
-## [NC-2] Missing NATSPEC
+## [G-7] No need to evaluate all expressions to know if one of them is true
 
+> Instances()
 
+When we have a code expressionA || expressionB if expressionA is true then expressionB will not be evaluated and gas saved
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
+
+86:  if (
+                !rrname.equals(name) ||
+                iter.class != CLASS_INET ||
+                iter.dnstype != TYPE_TXT
+            ) {
+
+144:  if (txt.length < 5 || !txt.equals(0, "ENS1 ", 0, 5)) {
+
+```
+[OffchainDNSResolver.sol#L86-L90](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L86-L90)
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
 
 ##
 
-## [NC-3] For functions, follow Solidity standard naming conventions (internal function style rule)
+## [G-8] The result of function calls should be cached rather than re-calling the function
 
-### Description
-The above codes don’t follow Solidity’s standard naming convention,
+> Instances()
 
-internal and private functions : the mixedCase format starting with an underscore (_mixedCase starting with an underscore)
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-##
-
-## [NC-4] Use scientific notation (e.g. 1e18) rather than exponentiation (e.g. 10**18)
-
-While the compiler knows to optimize away the exponentiation, it’s still better coding practice to use idioms that do not require compiler optimization, if they exist
+In Solidity, caching repeated function calls can be an effective way to optimize gas usage, especially when the function is called frequently with the same arguments
 
 ```solidity
 
@@ -442,40 +290,13 @@ While the compiler knows to optimize away the exponentiation, it’s still bette
 
 ##
 
-## [NC-5] Need Fuzzing test for unchecked
+## [G-9] Amounts should be checked for 0 before calling a transfer
 
+> Instances()
 
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-
-
-##
-
-## [NC-6] Remove commented out code
-
+Checking non-zero transfer values can avoid an expensive external call and save gas.
+While this is done at some places, it’s not consistently done in the solution.
+I suggest adding a non-zero-value check here
 
 ```solidity
 
@@ -495,40 +316,6 @@ While the compiler knows to optimize away the exponentiation, it’s still bette
 
 ```solidity
 
-```
-
-```solidity
-
-```
-
-##
-
-## [NC-7] Inconsistent spacing in comments
-
-Some lines use // x and some use //x. The instances below point out the usages that don’t follow the majority, within each file
-
-
-
-##
-
-## [NC-8] Inconsistent method of specifying a floating pragma
-
-Some files use >=, some use ^. The instances below are examples of the method that has the fewest instances for a specific version. Note that using >= without also specifying <= will lead to failures to compile, or external project incompatability, when the major version changes and there are breaking-changes, so ^ should be preferred regardless of the instance counts
-
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
 
 ```
 
@@ -541,10 +328,11 @@ Some files use >=, some use ^. The instances below are examples of the method th
 ```
 ##
 
-## [NC-9] Numeric values having to do with time should use time units for readability
+## [G-10] Don't declare the variable inside the loops
 
-There are [units](https://docs.soliditylang.org/en/latest/units-and-global-variables.html#time-units) for seconds, minutes, hours, days, and weeks, and since they’re defined, they should be used
+> Instances()
 
+In every iterations the new variables instance created this will consumes more gas . So just declare variables outside the loop and only use inside to save gas
 
 ```solidity
 
@@ -572,8 +360,83 @@ There are [units](https://docs.soliditylang.org/en/latest/units-and-global-varia
 
 ##
 
-## [NC-10] NO SAME VALUE INPUT CONTROL
+## [G-11] Empty blocks should be removed to save deployment cost
 
+> Instances()
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+
+##
+
+## [G-12] Functions should be used instead of modifiers to save gas
+
+> Instances()
+
+```solidity
+File; 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
+
+modifier onlyOwner() {
+        Root root = Root(ens.owner(bytes32(0)));
+        address owner = root.owner();
+        require(msg.sender == owner);
+        _;
+    }
+
+```
+[DNSRegistrar.sol#L73-L78](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L73-L78)
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+##
+
+## [G-13] Avoid contract existence checks by using low level calls
+
+> Instances()
+
+> Approximate gas saved:  gas
+
+Prior to 0.8.10 the compiler inserted extra code, including EXTCODESIZE (100 gas), to check for contract existence for external function calls. In more recent solidity versions, the compiler will not insert these checks if the external call has a return value. Similar behavior can be achieved in earlier versions by using low-level calls, since low level calls never check for contract existence
+
+```solidity
+
+```
+
+```solidity
+
+```
 
 ```solidity
 
@@ -601,31 +464,27 @@ There are [units](https://docs.soliditylang.org/en/latest/units-and-global-varia
 
 ##
 
-## [NC-11] Contract layout and order of functions
+## [G-14] Sort Solidity operations using short-circuit mode
 
-The Solidity style guide [recommends](https://docs.soliditylang.org/en/v0.8.17/style-guide.html#order-of-layout)
+> Instances(3)
 
-Declare internal functions bellow the external/public functions
+Short-circuiting is a solidity contract development model that uses OR/AND logic to sequence different cost operations. It puts low gas cost operations in the front and high gas cost operations in the back, so that if the front is low If the cost operation is feasible, you can skip (short-circuit) the subsequent high-cost Ethereum virtual machine operation.
 
+```
 
-##
+//f(x) is a low gas cost operation
+//g(y) is a high gas cost operation
+//Sort operations with different gas costs as follows
+f(x) || g(y)
+f(x) && g(y)
 
-## [NC-12] Constant redefined elsewhere
-
-Consider defining in only one contract so that values cannot become out of sync when only one location is updated.
-
-A cheap way to store constants in a single location is to create an internal constant in a library. If the variable is a local cache of another contract’s value, consider making the cache variable internal or private, which will require external users to query the contract with the source of truth, so that callers don’t get out of sync.
-
-
-
-##
-
-## [NC-13] According to the syntax rules, use => mapping ( instead of => mapping( using spaces as keyword
-
+```
 
 ```solidity
 
+
 ```
+[]()
 
 ```solidity
 
@@ -649,58 +508,29 @@ A cheap way to store constants in a single location is to create an internal con
 
 ##
 
-## [NC-14] Tokens accidentally sent to the contract cannot be recovered
+## [G-15] Use assembly to check for address(0)
 
-It can’t be recovered if the tokens accidentally arrive at the contract address, which has happened to many popular projects, so I recommend adding a recovery code to your critical contracts
+> Instances()
 
-### Recommended Mitigation Steps
-Add this code:
+Saves 6 gas per instance
+
 ```solidity
- /**
-  * @notice Sends ERC20 tokens trapped in contract to external address
-  * @dev Onlyowner is allowed to make this function call
-  * @param account is the receiving address
-  * @param externalToken is the token being sent
-  * @param amount is the quantity being sent
-  * @return boolean value indicating whether the operation succeeded.
-  *
- */
-  function rescueERC20(address account, address externalToken, uint256 amount) public onlyOwner returns (bool) {
-    IERC20(externalToken).transfer(account, amount);
-    return true;
-  }
-}
+FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
+
+102: if (dnsresolver != address(0)) 
+197: if (resolver == address(0)) {
+
 ```
+[OffchainDNSResolver.sol#L102](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L102)
 
-##
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 
-## [NC-15] Use SMTChecker
+115: if (addr != address(0)) {
+116: if (resolver == address(0)) {
 
-The highest tier of smart contract behavior assurance is formal mathematical verification. All assertions that are made are guaranteed to be true across all inputs → The quality of your asserts is the quality of your verification
-
-https://twitter.com/0xOwenThurm/status/1614359896350425088?t=dbG9gHFigBX85Rv29lOjIQ&s=19
-
-##
-
-## [NC-16] Constants on the left are better
-
-If you use the constant first you support structures that veil programming errors. And one should only produce code either to add functionality, fix an programming error or trying to support structures to avoid programming errors (like design patterns).
-
-https://www.moserware.com/2008/01/constants-on-left-are-better-but-this.html
-
-
-
-
-##
-
-## [NC-17] Assembly Codes Specific – Should Have Comments
-
-Since this is a low level language that is more difficult to parse by readers, include extensive documentation, comments on the rationale behind its use, clearly explaining what each assembly instruction does.
-
-This will make it easier for users to trust the code, for reviewers to validate the code, and for developers to build on or update the code.
-
-Note that using Assembly removes several important security features of Solidity, which can make the code more insecure and more error-prone
-
+```
+[DNSRegistrar.sol#L115-L116](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L115-L116)
 
 ```solidity
 
@@ -728,233 +558,168 @@ Note that using Assembly removes several important security features of Solidity
 
 ##
 
-## [NC-18] Take advantage of Custom Error’s return value property
+## [G-16] Shorthand way to write if / else statement can reduce the deployment cost
 
-An important feature of Custom Error is that values such as address, tokenID, msg.value can be written inside the () sign, this kind of approach provides a serious advantage in debugging and examining the revert details of dapps such as tenderly
-
-
-```solidity
-
-```
+> Instances()
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
 
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-##
-
-## [NC-19] Use constants instead of using numbers directly without explanations
-
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-
-
-
-
-
-
-LOW‑1   Use of ecrecover is susceptible to signature malleability       1
-LOW‑2   Event is missing parameters     2
-LOW‑3   Possible rounding issue 1
-LOW‑4   Low Level Calls With Solidity Version 0.8.14 Can Result In Optimiser Bug        1
-LOW‑5   Minting tokens to the zero address should be avoided    1
-LOW‑6   Missing Checks for Address(0x0) 1
-LOW‑7   Prevent division by 0   2
-LOW‑8   Use safetransfer Instead Of transfer    20
-LOW‑9   Admin privilege - A single point of failure can allow a hacked or malicious owner use critical functions in the project 7
-LOW‑10  TransferOwnership Should Be Two Step    1
-LOW‑11  Unbounded loop  2
-LOW‑12  Use safeTransferOwnership instead of transferOwnership function 1
-
-NC‑1    Add a timelock to critical functions    1
-NC‑2    Avoid Floating Pragmas: The Version Should Be Locked    8
-NC‑3    Constants Should Be Defined Rather Than Using Magic Numbers     5
-NC‑4    Critical Changes Should Use Two-step Procedure  1
-NC‑5    Declare interfaces on separate files    1
-NC‑6    Duplicated require()/revert() Checks Should Be Refactored To A Modifier Or Function     4
-NC‑7    Event Is Missing Indexed Fields 3
-NC‑8    Function writing that does not comply with the Solidity Style Guide     10
-NC‑9    Large or complicated code bases should implement fuzzing tests  1
-NC‑10   Imports can be grouped together 11
-NC‑11   NatSpec return parameters should be included in contracts       1
-NC‑12   Initial value check is missing in Set Functions 1
-NC‑13   Lines are too long      1
-NC‑14   Implementation contract may not be initialized  6
-NC‑15   NatSpec comments should be increased in contracts       1
-NC‑16   Non-usage of specific imports   28
-NC‑17   Use a more recent version of Solidity   10
-NC‑18   Open TODOs      1
-NC‑19   Using >/>= without specifying an upper bound is unsafe  2
-NC‑20   Public Functions Not Called By The Contract Should Be Declared External Instead 3
-NC‑21   Empty blocks should be removed or emit something        1
-NC‑22   require() / revert() Statements Should Have Descriptive Reason Strings  10
-NC‑23   Large multiples of ten should use scientific notation   6
-NC‑24   Use bytes.concat()      1
-NC‑25   Use Underscores for Number Literals     6
-
-Updated by: Sathish9098
-
-
-submissions@code423n4.com
-1:14 AM (11 hours ago)
-to submissions
-
-
-https://github.com/code-423n4/2023-04-frankencoin/blob/1022cb106919fba963a89205d3b90bf62543f68f/contracts/Position.sol#L181-L189
-
-https://github.com/code-423n4/2023-04-frankencoin/blob/1022cb106919fba963a89205d3b90bf62543f68f/contracts/Position.sol#L292-L296
-
-https://github.com/code-423n4/2023-04-frankencoin/blob/1022cb106919fba963a89205d3b90bf62543f68f/contracts/Position.sol#L366-L390
-
-https://github.com/code-423n4/2023-04-frankencoin/blob/1022cb106919fba963a89205d3b90bf62543f68f/contracts/MintingHub.sol#L54-L57
-
-https://github.com/code-423n4/2023-04-frankencoin/blob/1022cb106919fba963a89205d3b90bf62543f68f/contracts/MintingHub.sol#L59-L65
-
-https://github.com/code-423n4/2023-04-frankencoin/blob/1022cb106919fba963a89205d3b90bf62543f68f/contracts/MintingHub.sol#L235-L237
-+ 15: mapping (address => uint256) public nonces;
-FILE: 2023-04-frankencoin/contracts/Frankencoin.sol
-
-118: return minterReserveE6 / 1000000;
-166: uint256 usableMint = (_amount * (1000_000 - _feesPPM - _reservePPM)) / 1000_000; // rounding down is fine
-205: uint256 theoreticalReserve = _reservePPM * mintedAmount / 1000000;
-239: return 1000000 * amountExcludingReserve / (1000000 - adjustedReservePPM); // 41 / (1-18%) = 50
-
-
-```
-[Frankencoin.sol#L118](https://github.com/code-423n4/2023-04-frankencoin/blob/1022cb106919fba963a89205d3b90bf62543f68f/contracts/Frankencoin.sol#L118)
-
-##
-
-## [NC-20] Shorthand way to write if / else statement
-
-The normal if / else statement can be refactored in a shorthand way to write it:
-
-Increases readability
-Shortens the overall SLOC
-
-```solidity
-FILE: 2023-04-frankencoin/contracts/Position.sol
-
-184: if (time >= exp){
-            return 0;
+if (separator < lastIdx) {
+            parentNode = textNamehash(name, separator + 1, lastIdx);
         } else {
-            return uint32(mintingFeePPM - mintingFeePPM * (time - start) / (exp - start));
-        }
-
-160: if (newPrice > price) {
-            restrictMinting(3 days);
-        } else {
-            checkCollateral(collateralBalance(), newPrice);
-        }
-
-121: if (afterFees){
-            return totalMint * (1000_000 - reserveContribution - calculateCurrentFee()) / 1000_000;
-        } else {
-            return totalMint * (1000_000 - reserveContribution) / 1000_000;
-        }
-
-250: if (token == address(collateral)){
-            withdrawCollateral(target, amount);
-        } else {
-            IERC20(token).transfer(target, amount);
+            separator = lastIdx;
         }
 
 ```
-[Position.sol#L184-L188](https://github.com/code-423n4/2023-04-frankencoin/blob/1022cb106919fba963a89205d3b90bf62543f68f/contracts/Position.sol#L184-L188)
+[OffchainDNSResolver.sol#L216-L220](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L216-L220)
 
 ```solidity
-FILE: 2023-04-frankencoin/contracts/MintingHub.sol
-
-267: if (effectiveBid > fundsNeeded){
-            zchf.transfer(owner, effectiveBid - fundsNeeded);
-        } else if (effectiveBid < fundsNeeded){
-            zchf.notifyLoss(fundsNeeded - effectiveBid); // ensure we have enough to pay everything
-        }
-```
-[MintingHub.sol#L267-L271](https://github.com/code-423n4/2023-04-frankencoin/blob/1022cb106919fba963a89205d3b90bf62543f68f/contracts/MintingHub.sol#L267-L271)
-
-```solidity
-FILE: 2023-04-frankencoin/contracts/Frankencoin.sol
-
-141: if (balance <= minReserve){
-        return 0;
-      } else {
-        return balance - minReserve;
-      }
-
-207: if (currentReserve < minterReserve()){
-         // not enough reserves, owner has to take a loss
-         return theoreticalReserve * currentReserve / minterReserve();
-      } else {
-         return theoreticalReserve;
-      }
-
 
 ```
-[Frankencoin.sol#L141-L145](https://github.com/code-423n4/2023-04-frankencoin/blob/1022cb106919fba963a89205d3b90bf62543f68f/contracts/Frankencoin.sol#L141-L145)
-
-### Recommended Mitigation
 
 ```solidity
 
-time >= exp ? return 0 : return uint32(mintingFeePPM - mintingFeePPM * (time - start) / (exp - start));
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
 
 ```
 
 ##
 
-## [NC-21] Return values of approve() not checked
+## [G-17] The Less gas consuming condition checks should be on top
 
-Not all IERC20 implementations revert() when there’s a failure in approve(). The function signature has a boolean return value and they indicate errors that way instead. By not checking the return value, operations that should have marked as failed, may potentially go through without actually approving anything
+> Instances()
+
+When writing conditional statements in smart contracts, it is generally best practice to order the conditions so that the less gas-consuming checks are performed first. This can help to optimize the gas usage of the contract and improve its overall efficiency
 
 ```solidity
-FILE: 2023-04-frankencoin/contracts/ERC20.sol
-
-109: _approve(msg.sender, spender, value);
-132: _approve(sender, msg.sender, currentAllowance - amount);
 
 ```
-[ERC20.sol#L109](https://github.com/code-423n4/2023-04-frankencoin/blob/1022cb106919fba963a89205d3b90bf62543f68f/contracts/ERC20.sol#L109)
 
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+##
+
+## [G-18] internal functions not called by the contract should be removed to save deployment gas
+
+> Instances()
+
+If the functions are required by an interface, the contract should inherit from that interface and use the override keyword
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+
+```solidity
+
+```
+
+
+```solidity
+
+```
+
+
+```solidity
+
+```
+
+
+##
+
+## [G-19] Avoid emitting constants
+
+> Instances()
+
+One way to optimize your smart contract and reduce the gas cost is to avoid emitting constants. When you declare a constant in your contract, it is stored on the blockchain and takes up space. This can increase the cost of deploying your contract and make it more expensive to execute.
+
+To avoid emitting constants, you can use inline assembly to perform arithmetic operations or bitwise operations. You can also use local variables instead of constants, and calculate the values you need at runtime
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+```solidity
+
+```
+
+##
+
+## [G-20] Modifiers only called once can be inlined to save gas 
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
+
+73: modifier onlyOwner() {
+
+```
+[DNSRegistrar.sol#L73-L78](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L73-L78)
+
+##
+
+## [G-21] NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
+
+```solidity
+FILE:  2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
+
+166: function enableNode(bytes memory domain) public returns (bytes32 node) {
+
+174: function _enableNode(
+        bytes memory domain,
+        uint256 offset
+    ) internal returns (bytes32 node) {
+
+```
+[DNSRegistrar.sol#L166](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L166)
 
 
 
