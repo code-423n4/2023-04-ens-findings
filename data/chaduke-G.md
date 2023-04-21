@@ -89,21 +89,4 @@ function memcpy(uint256 dest, uint256 src, uint256 len) private pure {
     }
 ```
 
-G3. These lines can be eliminated to save gas:
-
-[https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L346-L348](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L346-L348)
-
-```
- for (uint256 i = 0; i < len; i++) {
-            bytes1 char = self[off + i];
-            require(char >= 0x30 && char <= 0x7A);
-            decoded = uint8(base32HexTable[uint256(uint8(char)) - 0x30]);
--            require(decoded <= 0x20);
-+            require(decoded < 0x20);
--            if (i == len - 1) {
--                break;
--            }
-            ret = (ret << 5) | decoded;
-        }
-```
 
