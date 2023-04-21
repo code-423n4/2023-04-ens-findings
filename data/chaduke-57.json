@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "chaduke",
+  "risk": "3",
+  "title": "hexStringToBytes32() will return the wrong value when lastIdx - idx is an odd number. ",
+  "issueId": 57,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/57"
+}
