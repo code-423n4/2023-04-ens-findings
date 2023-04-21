@@ -59,3 +59,33 @@ Mitigation:
             keccak(other, otherOffset, other.length - otherOffset);
     }
 ```
+QA6: memcpy() will have side effect (the copy might overwrite its own source) when the two memory ranges overlap, therefore, it is important to check that the two memory ranges do not overlap.
+
+[https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L273-L292](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L273-L292)
+
+Mitigation:
+```diff
+ function memcpy(uint256 dest, uint256 src, uint256 len) private pure {
++       if((src <= dest && src + len > dest) || dest <= src && dest + len > src) 
++             revert copyBetweenOverlappingMemoryRanges();
+
+        // Copy word-length chunks while possible
+        for (; len >= 32; len -= 32) {
+            assembly {
+                mstore(dest, mload(src))
+            }
+            dest += 32;
+            src += 32;
+        }
+
+        // Copy remaining bytes
+        unchecked {
+            uint256 mask = (256 ** (32 - len)) - 1;
+            assembly {
+                let srcpart := and(mload(src), not(mask))
+                let destpart := and(mload(dest), mask)
+                mstore(dest, or(destpart, srcpart))
+            }
+        }
+    }
+```
