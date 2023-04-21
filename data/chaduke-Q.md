@@ -123,3 +123,21 @@ Mitigation:
             ret = (ret << 5) | decoded;
         }
 ```
+
+QA9: parseString() uses the wrong offset of ``lastIdx``:
+
+[https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSClaimChecker.sol#L66-L74](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSClaimChecker.sol#L66-L74)
+
+Mitigation:
+```diff
+ function parseString(
+        bytes memory str,
+        uint256 idx,
+        uint256 len
+    ) internal pure returns (address, bool) {
+        // TODO: More robust parsing that handles whitespace and multiple key/value pairs
+        if (str.readUint32(idx) != 0x613d3078) return (address(0x0), false); // 0x613d3078 == 'a=0x'
+-        return str.hexToAddress(idx + 4, idx + len);
++        return str.hexToAddress(idx + 4, idx + 4 + len);
+    }
+```
