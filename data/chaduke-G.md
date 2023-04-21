@@ -89,4 +89,9 @@ function memcpy(uint256 dest, uint256 src, uint256 len) private pure {
     }
 ```
 
+G3. These lines can be deleted to save gas since they are already covered by the for loop condition.
+
+[https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/utils/NameEncoder.sol#L39-L41](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/utils/NameEncoder.sol#L39-L41)
+
+
 
