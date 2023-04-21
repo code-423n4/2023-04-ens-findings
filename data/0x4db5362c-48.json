@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "0x4db5362c",
+  "risk": "2",
+  "title": "The encoded dns name will be invalid if the length of one label is over 255 when call `NameEncoder.dnsEncodeName`",
+  "issueId": 48,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/48"
+}
