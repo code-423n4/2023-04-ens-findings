@@ -59,3 +59,33 @@ function compare(
     }
 ```
 
+G2. memcpy() might copy unnecessarily the remaining bytes. For example, when ``len`` is a multiple of 32, there are no remaining bytes to copy. However, the function still copy one word from ``dest`` to `dest`` (effectively), which is a waste of gas. We can save gas for this case by checking whether ``len == 0``:
+
+[https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L273-L292](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L273-L292)
+
+Optimization:
+```diff
+function memcpy(uint256 dest, uint256 src, uint256 len) private pure {
+        // Copy word-length chunks while possible
+        for (; len >= 32; len -= 32) {
+            assembly {
+                mstore(dest, mload(src))
+            }
+            dest += 32;
+            src += 32;
+        }
+
++       if(len == 0) return; 
+
+        // Copy remaining bytes
+        unchecked {
+            uint256 mask = (256 ** (32 - len)) - 1;
+            assembly {
+                let srcpart := and(mload(src), not(mask))
+                let destpart := and(mload(dest), mask)
+                mstore(dest, or(destpart, srcpart))
+            }
+        }
+    }
+```
+
