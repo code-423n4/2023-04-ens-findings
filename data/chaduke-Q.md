@@ -90,7 +90,8 @@ Mitigation:
     }
 ```
 
-QA7. Here is a typo in the code, "52" should be "32".
+QA7. "52" should be "51". Otherwise there might be an overflow issue here. This is because 
+ 52*5 = 260 bits > 32*8 bits. The largest ``len`` to avoid overflow is 51.  
 
 [https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L332-L377](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L332-L377)
 
@@ -101,7 +102,7 @@ QA7. Here is a typo in the code, "52" should be "32".
         uint256 len
     ) internal pure returns (bytes32) {
 -        require(len <= 52);
-+        require(len <= 32);
++        require(len <= 51);
 ```
 
 QA8: Valid decoded value should be smaller than ``0x20``, not equal. 
