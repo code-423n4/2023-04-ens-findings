@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "chaduke",
+  "risk": "3",
+  "title": "base32HexDecodeWord() will always break when ``len % 8 == 1, or 3, or 6``. ",
+  "issueId": 51,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/51"
+}
