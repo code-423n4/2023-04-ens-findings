@@ -413,7 +413,34 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
 ##
 
-## [L-12] Lack of address(0) before applying to state variables 
+## [L-12] Lack of address(0) check before assigning to state variables 
+
+it is considered a good practice to check for the validity of an address before assigning it to a state variables or immutable variables, especially if the contract uses the assigned address to interact with other contracts or perform transactions. If we assign wrong values because of human errors need to redeploy the contract.If the contract has been deployed with an incorrect or invalid value, it may need to be redeployed with the correct value, which can be time-consuming and expensive.
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
+
+44: ens = _ens;
+45: oracle = _oracle;
+
+```
+[OffchainDNSResolver.sol#L44-L45](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L44-L45)
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
+
+62: previousRegistrar = _previousRegistrar;
+63: resolver = _resolver;
+64: oracle = _dnssec;
+67: ens = _ens;
+
+```
+[DNSRegistrar.sol#L63-L65](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L63-L65)
+
+### Recommended Mitigations:
+
+require(_ens!=address(0), " zero address");
+
 
 
 
