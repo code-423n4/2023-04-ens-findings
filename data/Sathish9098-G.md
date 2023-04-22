@@ -3,6 +3,29 @@
 
 ##
 
+## [G-1] State variable value only set in the constructor can be declared as a constants to save large volume of the gas 
+
+gatewayURL string variable value is only set inside the constructor. The value is not changed anywhere inside the contract. This gatewayURL can be declared as constant to save large volume of gas 
+
+As per [Remix gas test](https://gist.github.com/sathishpic22/0079888aca5a6fe626b74f0063546138) approximately possible to saves 90000 gas
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
+
+39:  string public gatewayURL;
+
+43: constructor(ENS _ens, DNSSEC _oracle, string memory _gatewayURL) {
+        ens = _ens;
+        oracle = _oracle;
+        gatewayURL = _gatewayURL;
+    }
+
+```
+[OffchainDNSResolver.sol#L39-L47](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L39-L47)
+
+##
+
+
 ## [G-1] State variables should be cached in stack variables rather than re-reading them from storage
 
 > Instances()
@@ -335,8 +358,31 @@ I suggest adding a non-zero-value check here
 In every iterations the new variables instance created this will consumes more gas . So just declare variables outside the loop and only use inside to save gas
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSClaimChecker.sol
+
+29: for (
+            RRUtils.RRIterator memory iter = data.iterateRRs(0);
+            !iter.done();
+            iter.next()
+        ) {
+            if (iter.name().compareNames(buf.buf) != 0) continue;
+            bool found;  /// @audit found inside loop
+            address addr;  /// @audit addr inside loop
+            (addr, found) = parseRR(data, iter.rdataOffset, iter.nextOffset);
+            if (found) {
+                return (addr, true);
+            }
+        }
+
+51: while (idx < endIdx) {
+            uint256 len = rdata.readUint8(idx);
+            idx += 1;
+
+            bool found;
+            address addr;
 
 ```
+[DNSClaimChecker.sol#L29-L40](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSClaimChecker.sol#L29-L40)
 
 ```solidity
 
@@ -639,6 +685,7 @@ When writing conditional statements in smart contracts, it is generally best pra
 If the functions are required by an interface, the contract should inherit from that interface and use the override keyword
 
 ```solidity
+FILE: 
 
 ```
 
@@ -721,6 +768,113 @@ FILE:  2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 ```
 [DNSRegistrar.sol#L166](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L166)
 
+```solidity
+FILE: 2023-04-ens/contracts/utils/NameEncoder.sol
+
+9: function dnsEncodeName(
+        string memory name
+    ) internal pure returns (bytes memory dnsName, bytes32 node) {
+
+```
+[NameEncoder.sol#L9-L11](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/utils/NameEncoder.sol#L9-L11)
+
+```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
+
+106: function zeroProj()
+        internal
+        pure
+        returns (uint256 x, uint256 y, uint256 z)
+    {
+
+117:  function zeroAffine() internal pure returns (uint256 x, uint256 y) {
+
+124: function isZeroCurve(
+        uint256 x0,
+        uint256 y0
+    ) internal pure returns (bool isZero) {
+
+208: function addProj(
+        uint256 x0,
+        uint256 y0,
+        uint256 z0,
+        uint256 x1,
+        uint256 y1,
+        uint256 z1
+    ) internal pure returns (uint256 x2, uint256 y2, uint256 z2) {
+
+335: function multiplyScalar(
+        uint256 x0,
+        uint256 y0,
+        uint256 scalar
+    ) internal pure returns (uint256 x1, uint256 y1) {
+
+```
+[EllipticCurve.sol#L106-L110](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/algorithms/EllipticCurve.sol#L106-L110)
+
+```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
+
+87: function verifyRRSet(
+        RRSetWithSignature[] memory input
+    )
+        external
+        view
+        virtual
+        override
+        returns (bytes memory rrs, uint32 inception)
+
+107: function verifyRRSet(
+        RRSetWithSignature[] memory input,
+        uint256 now
+    )
+        public
+        view
+        virtual
+        override
+        returns (bytes memory rrs, uint32 inception)
+
+140: function validateSignedSet(
+        RRSetWithSignature memory input,
+        bytes memory proof,
+        uint256 now
+    ) internal view returns (RRUtils.SignedSet memory rrset) {
+
+181: function validateRRs(
+        RRUtils.SignedSet memory rrset,
+        uint16 typecovered
+    ) internal pure returns (bytes memory name) {
+
+
+
+```
+[DNSSECImpl.sol#L87-L94](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/DNSSECImpl.sol#L87-L94)
+
+##
+
+## [G-22] Use constants instead of type(uintx).max
+
+type(uint120).max or type(uint112).max, etc. it uses more gas in the distribution process and also for each transaction than constant usage
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/RecordParser.sol
+
+24: if (separator == type(uint256).max) {
+25: return ("", "", type(uint256).max);
+
+33: if (terminator == type(uint256).max) {
+
+```
+[RecordParser.sol#L24-L25](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/RecordParser.sol#L24-L25)
+
+```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/BytesUtils.sol
+
+398: return type(uint256).max;
+88:  mask = type(uint256).max;
+
+```
+[BytesUtils.sol#L398](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L398)
 
 
 
