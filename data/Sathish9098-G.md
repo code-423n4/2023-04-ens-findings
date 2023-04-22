@@ -23,39 +23,14 @@ FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
 ```
 [OffchainDNSResolver.sol#L39-L47](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L39-L47)
 
-##
-
-
-## [G-1] State variables should be cached in stack variables rather than re-reading them from storage
-
-> Instances()
-
-> Approximate gas saved: 
-
-Caching will replace each Gwarmaccess (100 gas) with a much cheaper stack read.
-Less obvious fixes/optimizations include having local storage variables of mappings within state variable mappings or mappings within state variable structs, having local storage variables of structs within mappings, having local memory caches of state variable structs, or having local caches of state variable contracts/addresses.
-
-
+> anchors value not changed any where inside the contract 
 ```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
+
+55: anchors = _anchors;
 
 ```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
+[DNSSECImpl.sol#L55](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/DNSSECImpl.sol#L55)
 
 ##
 
@@ -72,20 +47,26 @@ FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
 
 53: string[] memory urls = new string[](1);
 
+
 ```
 [OffchainDNSResolver.sol#L53](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L53)
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/BytesUtils.sol
+
+307: bytes memory ret = new bytes(len);
+
 ```
+[BytesUtils.sol#L307](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L307)
 
 ```solidity
-```
+FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
-```solidity
+408: uint256[3] memory P = addAndReturnProjectivePoint(x1, y1, x2, y2);
 ```
+[EllipticCurve.sol#L408](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/algorithms/EllipticCurve.sol#L408)
 
-```solidity
-```
+##
 
 ## [G-3] Multiple address/ID mappings can be combined into a single mapping of an address/ID to a struct, where appropriate
 
@@ -95,24 +76,13 @@ FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
 Saves a storage slot for the mapping. Depending on the circumstances and sizes of types, can avoid a Gsset (20000 gas) per mapping combined. Reads and subsequent writes can also be cheaper when a function requires both values and they both fit in the same storage slot. Finally, if both fields are accessed in the same function, can save ~42 gas per access due to [not having to recalculate the key’s keccak256 hash](https://gist.github.com/IllIllI000/ec23a57daa30a8f8ca8b9681c8ccefb0) (Gkeccak256 - 30 gas) and that calculation’s associated stack operations.
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
+
+45: mapping(uint8 => Algorithm) public algorithms;
+46: mapping(uint8 => Digest) public digests;
 
 ```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
+[DNSSECImpl.sol#L45-L46](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/DNSSECImpl.sol#L45-L46)
 
 ##
 
@@ -133,23 +103,6 @@ FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 
 ```
 [DNSRegistrar.sol#L47-L53](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L47-L53)
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
 
 
 ##
@@ -197,16 +150,12 @@ FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 [DNSRegistrar.sol#L80-L83](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L80-L83)
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
+
+55: anchors = _anchors;
 
 ```
-
-```solidity
-
-```
-
-```solidity
-
-```
+[DNSSECImpl.sol#L55](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/DNSSECImpl.sol#L55)
 
 ##
 
@@ -229,21 +178,12 @@ FILE: FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
 [OffchainDNSResolver.sol#L178](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L178)
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
+
+128: if (x0 == 0 && y0 == 0) {
 
 ```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
+[EllipticCurve.sol#L128](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/algorithms/EllipticCurve.sol#L128)
 
 ##
 
@@ -268,90 +208,38 @@ FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
 [OffchainDNSResolver.sol#L86-L90](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L86-L90)
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
+
+187: if (owner == address(0) || owner == previousRegistrar) {
 
 ```
+[DNSRegistrar.sol#L187](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L187)
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
+
+138: if (0 == x || x == p || 0 == y || y == p) {
+392: if (rs[0] == 0 || rs[0] >= n || rs[1] == 0) {
+41:  if (u == 0 || u == m || m == 0) return 0;
 
 ```
+[EllipticCurve.sol#L138](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/algorithms/EllipticCurve.sol#L138)
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
+
+201: if (
+                    name.length != iter.data.nameLength(iter.offset) ||
+                    !name.equals(0, iter.data, iter.offset, name.length)
+                ) {
 
 ```
+[DNSSECImpl.sol#L201-L204](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/DNSSECImpl.sol#L201-L204)
 
 ##
 
-## [G-8] The result of function calls should be cached rather than re-calling the function
 
-> Instances()
-
-In Solidity, caching repeated function calls can be an effective way to optimize gas usage, especially when the function is called frequently with the same arguments
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-##
-
-## [G-9] Amounts should be checked for 0 before calling a transfer
-
-> Instances()
-
-Checking non-zero transfer values can avoid an expensive external call and save gas.
-While this is done at some places, it’s not consistently done in the solution.
-I suggest adding a non-zero-value check here
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-##
-
-## [G-10] Don't declare the variable inside the loops
+## [G-8] Don't declare the variable inside the loops
 
 > Instances()
 
@@ -384,52 +272,12 @@ FILE: 2023-04-ens/contracts/dnsregistrar/DNSClaimChecker.sol
 ```
 [DNSClaimChecker.sol#L29-L40](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSClaimChecker.sol#L29-L40)
 
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-##
-
-## [G-11] Empty blocks should be removed to save deployment cost
-
-> Instances()
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
+https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L341-L342
 
 
 ##
 
-## [G-12] Functions should be used instead of modifiers to save gas
+## [G-9] Functions should be used instead of modifiers to save gas
 
 > Instances()
 
@@ -446,71 +294,9 @@ modifier onlyOwner() {
 ```
 [DNSRegistrar.sol#L73-L78](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L73-L78)
 
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
 ##
 
-## [G-13] Avoid contract existence checks by using low level calls
-
-> Instances()
-
-> Approximate gas saved:  gas
-
-Prior to 0.8.10 the compiler inserted extra code, including EXTCODESIZE (100 gas), to check for contract existence for external function calls. In more recent solidity versions, the compiler will not insert these checks if the external call has a return value. Similar behavior can be achieved in earlier versions by using low-level calls, since low level calls never check for contract existence
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-##
-
-## [G-14] Sort Solidity operations using short-circuit mode
+## [G-10] Sort Solidity operations using short-circuit mode
 
 > Instances(3)
 
@@ -527,34 +313,40 @@ f(x) && g(y)
 ```
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
+42:   if (u == 0 || u == m || m == 0) return 0;
+138:  if (0 == x || x == p || 0 == y || y == p) {
+392:  if (rs[0] == 0 || rs[0] >= n || rs[1] == 0) {
 
 ```
-[]()
+[EllipticCurve.sol#L42](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/algorithms/EllipticCurve.sol#L42)
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 
+187:  if (owner == address(0) || owner == previousRegistrar) {
 ```
+[DNSRegistrar.sol#L187](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L187)
+
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
+
+if (
+                !rrname.equals(name) ||
+                iter.class != CLASS_INET ||
+                iter.dnstype != TYPE_TXT
+            ) {
 
 ```
+[OffchainDNSResolver.sol#L86-L90](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L86-L90)
 
-```solidity
 
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
 
 ##
 
-## [G-15] Use assembly to check for address(0)
+## [G-11] Use assembly to check for address(0)
 
 > Instances()
 
@@ -574,37 +366,23 @@ FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 
 115: if (addr != address(0)) {
 116: if (resolver == address(0)) {
+187: if (owner == address(0) || owner == previousRegistrar) {
 
 ```
 [DNSRegistrar.sol#L115-L116](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L115-L116)
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
+
+317:  if (address(algorithm) == address(0)) {
+420:  if (address(digests[digesttype]) == address(0)) {
 
 ```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
+[DNSSECImpl.sol#L317](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/DNSSECImpl.sol#L317)
 
 ##
 
-## [G-16] Shorthand way to write if / else statement can reduce the deployment cost
+## [G-12] Shorthand way to write if / else statement can reduce the deployment cost
 
 > Instances()
 
@@ -621,127 +399,113 @@ if (separator < lastIdx) {
 [OffchainDNSResolver.sol#L216-L220](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L216-L220)
 
 ```solidity
+FILE : 2023-04-ens/contracts/dnssec-oracle/BytesUtils.sol
+
+if (shortest - idx >= 32) {
+                    mask = type(uint256).max;
+                } else {
+                    mask = ~(2 ** (8 * (idx + 32 - shortest)) - 1);
+                }
+
+```
+[BytesUtils.sol#L87-L91](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L87-L91)
+
+```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
+
+221: if (isZeroCurve(x0, y0)) {
+            return (x1, y1, z1);
+        } else if (isZeroCurve(x1, y1)) {
+            return (x0, y0, z0);
+        }
+
+234: if (t0 == t1) {
+                return twiceProj(x0, y0, z0);
+            } else {
+                return zeroProj();
+            }
+
+```
+[EllipticCurve.sol#L221-L225](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/algorithms/EllipticCurve.sol#L221-L225)
+
+### Recommended Mitigation
+
+```solidity
+
+if (separator < lastIdx) {
+            parentNode = textNamehash(name, separator + 1, lastIdx);
+        } else {
+            separator = lastIdx;
+        }
 
 ```
 
 ```solidity
 
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
+separator < lastIdx ? parentNode = textNamehash(name, separator + 1, lastIdx); : separator = lastIdx ;
 
 ```
 
 ##
 
-## [G-17] The Less gas consuming condition checks should be on top
+## [G-13] The Less gas consuming condition checks should be on top
 
 > Instances()
 
 When writing conditional statements in smart contracts, it is generally best practice to order the conditions so that the less gas-consuming checks are performed first. This can help to optimize the gas usage of the contract and improve its overall efficiency
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
+
+> "if (!isOnCurve(Q[0], Q[1])) {" check should come top then "if (rs[0] == 0 || rs[0] >= n || rs[1] == 0) { " condition 
+
+  if (rs[0] == 0 || rs[0] >= n || rs[1] == 0) {
+            // || rs[1] > lowSmax)
+            return false;
+        }
+        if (!isOnCurve(Q[0], Q[1])) {
+            return false;
+        }
 
 ```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
+[EllipticCurve.sol#L392-L396](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/algorithms/EllipticCurve.sol#L392-L396)
 
 ##
 
-## [G-18] internal functions not called by the contract should be removed to save deployment gas
+## [G-14] internal functions not called by the contract should be removed to save deployment gas
 
 > Instances()
 
 If the functions are required by an interface, the contract should inherit from that interface and use the override keyword
 
-```solidity
-FILE: 
-
-```
 
 ```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
+
+386: function validateSignature(
+        bytes32 message,
+        uint256[2] memory rs,
+        uint256[2] memory Q
+    ) internal pure returns (bool) {
+
+377: function multipleGeneratorByScalar(
+        uint256 scalar
+    ) internal pure returns (uint256, uint256) {
+
+316: function multiplyPowerBase2(
+        uint256 x0,
+        uint256 y0,
+        uint256 exp
+    ) internal pure returns (uint256, uint256) {
 
 ```
-
-```solidity
-
-```
-
-
-```solidity
-
-```
-
-
-```solidity
-
-```
-
-
-```solidity
-
-```
-
+[EllipticCurve.sol#L386-L390](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/algorithms/EllipticCurve.sol#L386-L390)
 
 ##
 
-## [G-19] Avoid emitting constants
+## [G-15] Modifiers or private functions only called once can be inlined to save gas 
 
-> Instances()
-
-One way to optimize your smart contract and reduce the gas cost is to avoid emitting constants. When you declare a constant in your contract, it is stored on the blockchain and takes up space. This can increase the cost of deploying your contract and make it more expensive to execute.
-
-To avoid emitting constants, you can use inline assembly to perform arithmetic operations or bitwise operations. You can also use local variables instead of constants, and calculate the values you need at runtime
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-##
-
-## [G-20] Modifiers only called once can be inlined to save gas 
+ITs possible to save 40-50 gas 
 
 ```solidity
 FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
@@ -751,9 +515,17 @@ FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 ```
 [DNSRegistrar.sol#L73-L78](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L73-L78)
 
+```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/BytesUtils.sol
+
+273: function memcpy(uint256 dest, uint256 src, uint256 len) private pure {
+
+```
+[BytesUtils.sol#L273](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L273)
+
 ##
 
-## [G-21] NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
+## [G-16] NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
 
 ```solidity
 FILE:  2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
@@ -852,9 +624,9 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 
 ##
 
-## [G-22] Use constants instead of type(uintx).max
+## [G-17] Use constants instead of type(uintx).max
 
-type(uint120).max or type(uint112).max, etc. it uses more gas in the distribution process and also for each transaction than constant usage
+type(uint256).max it uses more gas in the distribution process and also for each transaction than constant usage
 
 ```solidity
 FILE: 2023-04-ens/contracts/dnsregistrar/RecordParser.sol
@@ -875,6 +647,31 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/BytesUtils.sol
 
 ```
 [BytesUtils.sol#L398](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L398)
+
+##
+
+## [G-18] Instead of calculating bytes32(0) every time inside the contract its possible to use constants to reduce the gas cost 
+
+By defining a constant variable, you can avoid computing the value of bytes32(0) every time it is used in your contract. Instead, you can simply reference the constant variable, which will have the same value as bytes32(0)
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
+
+74:  Root root = Root(ens.owner(bytes32(0)));
+180: return bytes32(0);
+188: if (parentNode == bytes32(0)) {
+189: Root root = Root(ens.owner(bytes32(0)));
+
+
+```
+
+[DNSRegistrar.sol#L74](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L74)
+
+##
+
+
+
+
 
 
 
