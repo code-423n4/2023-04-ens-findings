@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "chaduke",
+  "risk": "3",
+  "title": "The SHA1 hash function is unsafe due to SHA-1 chosen prefix collisions.",
+  "issueId": 66,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/66"
+}
