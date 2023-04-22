@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "pipoca",
+  "risk": "2",
+  "title": "Denial of service (DoS) attack  in Loops within verifyWithDS and verifyWithKnownKey Functions",
+  "issueId": 77,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/77"
+}
