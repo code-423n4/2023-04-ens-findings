@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "kartkhira",
+  "risk": "2",
+  "title": "Possible Collision due keccak256 of ebi.encodePacked",
+  "issueId": 76,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/76"
+}
