@@ -201,3 +201,42 @@ function hexStringToBytes32(
         }
     }
 ```
+
+QA11. readKeyValue() fails to enforce the constraint ``offset+len<=input.length``. As a result, the key-value pair might be read from dirty memory area that is beyond the memory range of ``input`` and thus could be wrong. 
+
+[https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/RecordParser.sol#L14-L40](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/RecordParser.sol#L14-L40)
+
+Mitigation: make sure ``offset+len<=input.length``:
+```diff
+function readKeyValue(
+        bytes memory input,
+        uint256 offset,
+        uint256 len
+    )
+        internal
+        pure
+        returns (bytes memory key, bytes memory value, uint256 nextOffset)
+    {
+
++       if(offset + len > input.length) revert outOfBoundAccess();
+
+        uint256 separator = input.find(offset, len, "=");
+        if (separator == type(uint256).max) {
+            return ("", "", type(uint256).max);
+        }
+
+        uint256 terminator = input.find(
+            separator,
+            len + offset - separator,
+            " "
+        );
+        if (terminator == type(uint256).max) {
+-            terminator = input.length;
++            terminator = offset + len;
+        }
+
+        key = input.substring(offset, separator - offset);
+        value = input.substring(separator + 1, terminator - separator - 1);
+        nextOffset = terminator + 1;
+    }
+```
