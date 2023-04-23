@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "J4de",
+  "risk": "2",
+  "title": "`RRUtils.sol#validateSignedSet` function will error when the public key is valid for a long time",
+  "issueId": 87,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/87"
+}
