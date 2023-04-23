@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "MohammedRizwan",
+  "risk": "2",
+  "title": "resolveCallback can silently fail for non-existent address via staticcall()",
+  "issueId": 81,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/81"
+}
