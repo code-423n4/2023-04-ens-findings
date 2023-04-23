@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "J4de",
+  "risk": "2",
+  "title": "`DNSSECImpl.sol` contract does not have a revocation mechanism",
+  "issueId": 89,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/89"
+}
