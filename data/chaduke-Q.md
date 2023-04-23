@@ -240,3 +240,11 @@ function readKeyValue(
         nextOffset = terminator + 1;
     }
 ```
+
+QA12: The mask here should have 12 ending zero instead of 14 ending zero. 
+
+[https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L248](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L248)
+
+Impact: so far, no affecting the result, but desirable to have a one-word mask instead of 34 bytes mask.
+
+Mitigation: change the mask to have 12 ending zero instead of 14 ending zero. 
