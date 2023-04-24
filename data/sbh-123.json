@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "sbh",
+  "risk": "3",
+  "title": "Multiple Security issues due to Incomplete Type Checking in contracts/dnssec-oracle/RRUtils.sol",
+  "issueId": 123,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/123"
+}
