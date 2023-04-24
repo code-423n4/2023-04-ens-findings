@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "chaduke",
+  "risk": "3",
+  "title": "hexToAddress() does not check and ensure lastIdx == idx + 40 and might return the wrong address.",
+  "issueId": 144,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/144"
+}
