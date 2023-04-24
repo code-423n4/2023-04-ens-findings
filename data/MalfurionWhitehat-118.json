@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "MalfurionWhitehat",
+  "risk": "2",
+  "title": "NameEncoder.dnsEncodeName does not validate that ENS label length is less than 256 characters, producing invalid node values",
+  "issueId": 118,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/118"
+}
