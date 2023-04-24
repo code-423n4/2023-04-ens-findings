@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "sbh",
+  "risk": "2",
+  "title": "Denial of Service in enableNode() at contracts/dnsregistrar/DNSRegistrar.sol",
+  "issueId": 143,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/143"
+}
