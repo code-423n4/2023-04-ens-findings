@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "ravi_gaint",
+  "risk": "3",
+  "title": "[H-02] `affineToJacobian` and `jacobianToAffine` functions do not check point validity",
+  "issueId": 128,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/128"
+}
