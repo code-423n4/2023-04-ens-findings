@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "MalfurionWhitehat",
+  "risk": "2",
+  "title": "Missing recursive calls handling in `OffchainDNSResolver` CCIP-aware contract",
+  "issueId": 124,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/124"
+}
