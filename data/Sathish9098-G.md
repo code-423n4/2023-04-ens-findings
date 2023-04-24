@@ -187,11 +187,11 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
 ##
 
-## [G-7] No need to evaluate all expressions to know if one of them is true
+## [G-7] Unnecessary look up in if condition
 
 > Instances()
 
-When we have a code expressionA || expressionB if expressionA is true then expressionB will not be evaluated and gas saved
+If the || condition isn’t required, the second condition will have been looked up unnecessarily.
 
 ```solidity
 FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
