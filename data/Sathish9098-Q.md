@@ -213,18 +213,6 @@ FILE: 2023-04-ens/contracts/utils/NameEncoder.sol
 Devoid of sanity/threshold/limit checks, critical parameters can be configured to invalid values, causing a variety of issues and breaking expected interactions within/between contracts. Consider adding proper uint256 validation as well as zero address checks for critical changes. A worst case scenario would render the contract needing to be re-deployed in the event of human/accidental errors that involve value assignments to immutable variables. If the validation procedure is unclear or too complex to implement on-chain, document the potential issues that could produce invalid values
 
 ```solidity
-FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
-
-constructor(ENS _ens, DNSSEC _oracle, string memory _gatewayURL) {
-        ens = _ens;
-        oracle = _oracle;
-        gatewayURL = _gatewayURL;
-    }
-
-```
-[OffchainDNSResolver.sol#L43-L47](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L43-L47)
-
-```solidity
 FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 
 64: function setAlgorithm(uint8 id, Algorithm algo) public owner_only {
@@ -413,9 +401,9 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
 ##
 
-## [L-12] Lack of address(0) check before assigning to state variables 
+## [L-12] In the constructor, there is no return of incorrect address identification
 
-it is considered a good practice to check for the validity of an address before assigning it to a state variables or immutable variables, especially if the contract uses the assigned address to interact with other contracts or perform transactions. If we assign wrong values because of human errors need to redeploy the contract.If the contract has been deployed with an incorrect or invalid value, it may need to be redeployed with the correct value, which can be time-consuming and expensive.
+In case of incorrect address definition in the constructor , there is no way to fix it because of the variables are immutable.
 
 ```solidity
 FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
@@ -1142,6 +1130,89 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 
 
 ```
+##
+
+## [NC-22] Contracts should have full test coverage
+
+While 100% code coverage does not guarantee that there are no bugs, it often will catch easy-to-find bugs, and will ensure that there are fewer regressions when the code invariably has to be modified. Furthermore, in order to get full coverage, code authors will often have to re-organize their code so that it is more modular, so that each component can be tested separately, which reduces interdependencies between modules and layers, and makes for code that is easier to reason about and audit
+
+```
+What is the overall line coverage percentage provided by your tests?:  90
+
+```
+
+##
+
+## [NC-22] Use named parameters for mapping type declarations
+
+Consider using named parameters in mappings (e.g. mapping(address account => uint256 balance)) to improve readability. This feature is present since Solidity 0.8.18.
+
+```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
+
+45: mapping(uint8 => Algorithm) public algorithms;
+46: mapping(uint8 => Digest) public digests;
+
+```
+[DNSSECImpl.sol#L45-L46](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/DNSSECImpl.sol#L45-L46)
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
+
+32: mapping(bytes32 => uint32) public inceptions;
+
+```
+[DNSRegistrar.sol#L32](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L32)
+
+##
+
+## [NC-23] File does not contain an SPDX Identifier 
+
+https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/SHA1.sol#L1-L3
+
+https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L1-L3
+
+https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/RRUtils.sol#L1-L9
+
+https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/algorithms/EllipticCurve.sol#L1-L19
+
+##
+
+## [NC-24] declaration shadows an existing declaration
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
+
+30:   address public immutable resolver;
+104:  address resolver,
+159:  function resolver(
+
+192: address owner,
+143: function owner(
+
+```
+
+##
+
+## [NC-25] Event is missing indexed fields
+
+Index event fields make the field more quickly accessible to off-chain tools that parse events. However, note that each index field costs extra gas during emission, so it’s not necessarily best to index the maximum allowed per event (threefields). Each event should use three indexed fields if there are three or more fields, and gas usage is not particularly of concern for the events in question. If there are fewer than three fields, all of the fields should be indexed.
+
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
+
+47: event Claim(
+        bytes32 indexed node,
+        address indexed owner,
+        bytes dnsname,
+        uint32 inception
+    );
+53: event NewPublicSuffixList(address suffixes);
+
+```
+[DNSRegistrar.sol#L47-L53](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L47-L53)
+
+
 
 
 
