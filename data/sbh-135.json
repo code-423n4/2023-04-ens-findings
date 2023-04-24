@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "sbh",
+  "risk": "3",
+  "title": "out-of-bounds access can manipulate the behavior of the contract in contracts/dnssec-oracle/BytesUtils.sol",
+  "issueId": 135,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/135"
+}
