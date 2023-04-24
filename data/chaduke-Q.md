@@ -59,7 +59,7 @@ Mitigation:
             keccak(other, otherOffset, other.length - otherOffset);
     }
 ```
-QA6: memcpy() will have side effect (the copy might overwrite its own source) when the two memory ranges overlap, therefore, it is important to check that the two memory ranges do not overlap.
+QA6: memcpy() will have side effect (the copy might overwrite its own source) when the two memory ranges overlap, therefore, it is important to check that the two memory ranges do not overlap. For example when src < dest but src + 32 > dest, there will be an overlap, and the copy will overwrite it source value before it is read. 
 
 [https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L273-L292](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L273-L292)
 
