@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "sbh",
+  "risk": "3",
+  "title": "Transaction failing due to GAS limits and Denial Of Service attack in contracts/dnsregistrar/DNSRegistrar.sol",
+  "issueId": 142,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/142"
+}
