@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "sbh",
+  "risk": "3",
+  "title": "Lack of Return Value Validation leading to a DoS attack or undefined behavior in contracts/dnssec-oracle/RRUtils.sol",
+  "issueId": 125,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/125"
+}
