@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "nobody2018",
+  "risk": "2",
+  "title": "HexUtils.hexToAddress should only parse a hex string with length equal to 40",
+  "issueId": 109,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/109"
+}
