@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "sbh",
+  "risk": "3",
+  "title": "Lack of variable validation leads to Denial-Of-Service (DoS) attack in contracts/dnsregistrar/OffchainDNSResolver.sol",
+  "issueId": 139,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/139"
+}
