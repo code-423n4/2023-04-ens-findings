@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "MalfurionWhitehat",
+  "risk": "2",
+  "title": "EllipticCurve.inverseMod yields a wrong result when u and m are not coprime",
+  "issueId": 120,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/120"
+}
