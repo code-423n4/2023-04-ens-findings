@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "sbh",
+  "risk": "2",
+  "title": "No Gas Limit leads to DoS attacks in contracts/dnssec-oracle/algorithms/EllipticCurve.sol",
+  "issueId": 127,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/127"
+}
