@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "saneryee",
+  "risk": "2",
+  "title": "Missing zero address validation",
+  "issueId": 159,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/159"
+}
