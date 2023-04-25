@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "Bauer",
+  "risk": "3",
+  "title": "Without a pause mechanism, there is a risk that ENS domain names may be stolen in case of special circumstances",
+  "issueId": 158,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/158"
+}
