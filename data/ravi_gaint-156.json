@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "ravi_gaint",
+  "risk": "3",
+  "title": "[H-05] Incomplete Digest Length Check in parseDS Function",
+  "issueId": 156,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/156"
+}
