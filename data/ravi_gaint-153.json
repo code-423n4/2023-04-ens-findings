@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "ravi_gaint",
+  "risk": "2",
+  "title": "[M-03] Lack of RDATA section validation in parseRR function",
+  "issueId": 153,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/153"
+}
