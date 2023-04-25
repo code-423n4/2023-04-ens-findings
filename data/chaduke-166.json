@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "chaduke",
+  "risk": "2",
+  "title": "isSubdomainOf() will consider a domain is a subdomain of itself, strictly speaking, the result is wrong in this case.",
+  "issueId": 166,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/166"
+}
