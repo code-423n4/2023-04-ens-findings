@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "ravi_gaint",
+  "risk": "3",
+  "title": "[H-03] Potential parsing issue with TXT records in `RdataTXT` function",
+  "issueId": 151,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/151"
+}
