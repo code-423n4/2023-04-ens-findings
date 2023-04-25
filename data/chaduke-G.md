@@ -89,6 +89,33 @@ function memcpy(uint256 dest, uint256 src, uint256 len) private pure {
     }
 ```
 
+G3. We can save gas by optimizing textNameHash() as follows:
+```diff
+function textNamehash(
+        bytes memory name,
+        uint256 idx,
+        uint256 lastIdx
+    ) internal view returns (bytes32) {
+        uint256 separator = name.find(idx, name.length - idx, bytes1("."));
+-        bytes32 parentNode = bytes32(0);
+        if (separator < lastIdx) {
+-            parentNode = textNamehash(name, separator + 1, lastIdx);
++            bytes32 parentNode = textNamehash(name, separator + 1, lastIdx);
++            return keccak256(
++                abi.encodePacked(parentNode, name.keccak(idx, separator - idx))
++            );
+        } else {
+-            separator = lastIdx;
++            return keccak256(
++                abi.encodePacked(0, name.keccak(idx, lastIdx - idx))
++            );
+        }
+-        return
+-            keccak256(
+-                abi.encodePacked(parentNode, name.keccak(idx, separator - idx))
+-            );
+    }
+```
 
 
 
