@@ -1,0 +1,2 @@
+In file BytesUtils.sol the function compare() has a problem the result will not be correct lexicographically for that cases when a is MAX_INT256 or less then MAX_INT256 and b is 0 in that case and many like it the self in after lexicographically but if a is more then MAX_INT256 the result will be negative but if a is less or equal to MAX_INT256 the result will be positive which does not make sence
+effects: unexpected return value which is not flow the doc
