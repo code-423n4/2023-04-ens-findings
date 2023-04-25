@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "tomerganor",
+  "risk": "2",
+  "title": "wrong casting to int256 that may cause unexpexted revert with legitimate input",
+  "issueId": 162,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/162"
+}
