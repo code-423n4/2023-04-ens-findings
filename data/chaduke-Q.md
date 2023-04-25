@@ -218,3 +218,29 @@ QA11: The mask here should have 12 ending zero instead of 14 ending zero.
 Impact: so far, no affecting the result, but desirable to have a one-word mask instead of 34 bytes mask.
 
 Mitigation: change the mask to have 12 ending zero instead of 14 ending zero. 
+
+QA12. The ``parseAndResolve()`` does not deal with the case when ``valid == false``:
+
+[https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L173-L188](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L173-L188)
+
+Mitigation: consider the case of ``valid == false``:
+
+```diff
+function parseAndResolve(
+        bytes memory nameOrAddress,
+        uint256 idx,
+        uint256 lastIdx
+    ) internal view returns (address) {
+        if (nameOrAddress[idx] == "0" && nameOrAddress[idx + 1] == "x") {
+            (address ret, bool valid) = nameOrAddress.hexToAddress(
+                idx + 2,
+                lastIdx
+            );
+            if (valid) {
+                return ret;
+            }
++           else return address(0);
+        }
+        return resolveName(nameOrAddress, idx, lastIdx);
+    }
+```
