@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "ravi_gaint",
+  "risk": "2",
+  "title": "[M-04] Lack of Length Check in parseNSEC3 Function in RRUtils.sol",
+  "issueId": 154,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/154"
+}
