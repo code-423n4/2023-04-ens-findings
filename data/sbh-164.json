@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "sbh",
+  "risk": "3",
+  "title": "Timestamp manipulation affects DNSSEC records on contracts/dnssec-oracle/DNSSECImpl.sol",
+  "issueId": 164,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/164"
+}
