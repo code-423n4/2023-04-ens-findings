@@ -183,3 +183,43 @@ Consider implementing the missing features, where possible, to ensure proper val
 
 ## Inadequately Commented Assembly Block
 Assembly block is used in numerous contracts throughout the codebase. While this does not pose a security risk per se, it is at the same time a complicated and critical part of the system. Moreover, as this is a low-level language that is harder to parse by readers, consider including extensive documentation regarding the rationale behind its use, clearly explaining what every single assembly instruction does. This will make it easier for users to trust the code, for reviewers to verify it, and for developers to build on top of it or update it. Note that the use of assembly discards several important safety features of Solidity, which may render the code less safe and more error-prone.
+
+## `abi.encodePacked()` should not be used with dynamic types when passing the result to a hash function such as `keccak256()`
+Use `abi.encode()` instead which will pad items to 32 bytes, which will prevent hash collisions (e.g. `abi.encodePacked(0x123,0x456) => 0x123456 => abi.encodePacked(0x1,0x23456`), but `abi.encode(0x123,0x456) => 0x0...1230...456`). "Unless there is a compelling reason, `abi.encode` should be preferred". If there is only one argument to `abi.encodePacked()`, it can often be cast to `bytes()` or `bytes32()` instead. If all arguments are strings and or bytes, `bytes.concat()` should be used instead.
+
+For instance, the specific instance below may be refactored as follows:
+
+[File: NameEncoder.sol#L24-L47](https://github.com/code-423n4/2023-04-ens/blob/main/contracts/utils/NameEncoder.sol#L24-L47)
+
+```diff
+        unchecked {
+            for (uint256 i = length - 1; i >= 0; i--) {
+                if (bytesName[i] == ".") {
+                    dnsName[i + 1] = bytes1(labelLength);
+                    node = keccak256(
+-                        abi.encodePacked(
++                        abi.encode(
+                            node,
+                            bytesName.keccak(i + 1, labelLength)
+                        )
+                    );
+                    labelLength = 0;
+                } else {
+                    labelLength += 1;
+                    dnsName[i + 1] = bytesName[i];
+                }
+                if (i == 0) {
+                    break;
+                }
+            }
+        }
+
+        node = keccak256(
+-            abi.encodePacked(node, bytesName.keccak(0, labelLength))
++            abi.encode(node, bytesName.keccak(0, labelLength))
+        );
+```
+## YUL inline assembly error messages 
+`revert(0, 0)` in the assembly block of [`HexUtils.hexStringToBytes32()`](https://github.com/code-423n4/2023-04-ens/blob/main/contracts/utils/HexUtils.sol#L20) provides no information about the reason for the failure. 
+
+Consider implementing error messages or custom error types to provide more information about the cause of the revert.
