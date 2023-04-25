@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "sbh",
+  "risk": "3",
+  "title": "From integer Overflow to DoS attack that leads to financial losses in ModexpPrecompile.modexp function and RSAVerify library.",
+  "issueId": 161,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/161"
+}
