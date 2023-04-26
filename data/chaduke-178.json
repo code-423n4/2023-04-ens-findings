@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "chaduke",
+  "risk": "2",
+  "title": "A malicious user can register an address-style name (e.g. 0xcbe34e5a23890a2d3a1c5e456198a23d123d) for a resolver to trick users. ",
+  "issueId": 178,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/178"
+}
