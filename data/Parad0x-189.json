@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "Parad0x",
+  "risk": "2",
+  "title": "Incorrect Reading Logic in readKeyValue() - Potential wrong key-value",
+  "issueId": 189,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/189"
+}
