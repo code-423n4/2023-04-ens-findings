@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "MohammedRizwan",
+  "risk": "2",
+  "title": "The return value of verify() does not check for failed RSA signature verification",
+  "issueId": 177,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/177"
+}
