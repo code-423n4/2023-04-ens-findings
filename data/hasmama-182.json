@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "hasmama",
+  "risk": "2",
+  "title": "Vulnerability in parseKey function allowing arbitrary data to be parsed as a key",
+  "issueId": 182,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/182"
+}
