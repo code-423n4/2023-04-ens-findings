@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "hassan-truscova",
+  "risk": "3",
+  "title": "verifySignatureWithKey - RRSIG RR's Signer's Name is never checked if it matches owner name",
+  "issueId": 196,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/196"
+}
