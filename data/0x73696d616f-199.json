@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "0x73696d616f",
+  "risk": "3",
+  "title": "A DNS owner can sell the domain and then regain it back using a signature while he was still the owner of the domain",
+  "issueId": 199,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/199"
+}
