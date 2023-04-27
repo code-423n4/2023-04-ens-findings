@@ -29,7 +29,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/BytesUtils.sol
 ```
 [BytesUtils.sol#L376](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L376)
 
-
+##
 
 ## [L-2] Loss of precision due to rounding
 
@@ -54,7 +54,6 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 161: revert SignatureExpired(rrset.expiration, uint32(now));
 166: if (!RRUtils.serialNumberGte(uint32(now), rrset.inception)) {
 167: revert SignatureNotValidYet(rrset.inception, uint32(now));
-
 
 ```
 [DNSSECImpl.sol#L160](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/DNSSECImpl.sol#L160)
@@ -228,29 +227,6 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 ```
 [DNSSECImpl.sol#L64-L78](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/DNSSECImpl.sol#L64-L78)
 
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
 ##
 
 ## [L-7] Function Calls in Loop Could Lead to Denial of Service
@@ -384,12 +360,12 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/P256SHA256Algorithm.sol
 
 ##
 
-## [L-11] Unbounded Loop 
+## [L-11] Avoid infinite loops whenever possible
 
 ```solidity
 FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
-> This r2 != 0 condition check always true. 
+> This r2 != 0 condition can be always true cause unbounded loop. This condition only fails if r2 is exactly equal to 0   
 
 51: while (r2 != 0) {
                 q = r1 / r2;
@@ -398,6 +374,21 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
 ```
 [EllipticCurve.sol#L51-L54](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/algorithms/EllipticCurve.sol#L51-L54)
+
+```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/RRUtils.sol
+
+while (true) {
+            assert(idx < self.length);
+            uint256 labelLen = self.readUint8(idx);
+            idx += labelLen + 1;
+            if (labelLen == 0) {
+                break;
+            }
+        }
+
+```
+[RRUtils.sol#L24-L31](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/RRUtils.sol#L24-L31)
 
 ##
 
@@ -429,9 +420,58 @@ FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 
 require(_ens!=address(0), " zero address");
 
+##
+
+## [L-13] Even with the onlyOwner or owner_only modifier, it is best practice to use the re-entrancy pattern
+
+It's still good practice to apply the reentry model as a precautionary measure in case the code is changed in the future to remove the onlyOwner modifier or the contract is used as a base contract for other contracts.
+
+Using the reentry modifier provides an additional layer of security and ensures that your code is protected from potential reentry attacks regardless of any other security measures you take.
+
+So even if you followed the "check-effects-interactions" pattern correctly, it's still considered good practice to use the reentry modifier
 
 
+```solidity
+FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 
+80: function setPublicSuffixList(PublicSuffixList _suffixes) public onlyOwner {
+        suffixes = _suffixes;
+        emit NewPublicSuffixList(address(suffixes));
+    }
+
+```
+[DNSRegistrar.sol#L80-L83](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L80-L83)
+
+```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
+
+64: function setAlgorithm(uint8 id, Algorithm algo) public owner_only {
+        algorithms[id] = algo;
+        emit AlgorithmUpdated(id, address(algo));
+    }
+
+75: function setDigest(uint8 id, Digest digest) public owner_only {
+        digests[id] = digest;
+        emit DigestUpdated(id, address(digest));
+    }
+
+```
+[DNSSECImpl.sol#L64-L67](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/DNSSECImpl.sol#L64-L67)
+
+Recommended Mitigation:
+
+```solidity
+
+  modifier noReentrant() {
+        require(!locked, "Reentrant call");
+        locked = true;
+        _;
+        locked = false;
+    }
+
+function setPublicSuffixList(PublicSuffixList _suffixes) public  onlyOwner noReentrant  {
+
+```
 
 ##
 
