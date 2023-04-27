@@ -5,6 +5,10 @@
 
 ## [G-1] State variable value only set in the constructor can be declared as a constants to save large volume of the gas 
 
+> Instances (1) 
+
+> Approximate Gas Saved : (4000 gas) (As per my remix test 90000 gas)
+
 gatewayURL string variable value is only set inside the constructor. The value is not changed anywhere inside the contract. This gatewayURL can be declared as constant to save large volume of gas 
 
 As per [Remix gas test](https://gist.github.com/sathishpic22/0079888aca5a6fe626b74f0063546138) approximately possible to saves 90000 gas
@@ -23,22 +27,13 @@ FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
 ```
 [OffchainDNSResolver.sol#L39-L47](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/OffchainDNSResolver.sol#L39-L47)
 
-> anchors value not changed any where inside the contract 
-```solidity
-FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
-
-55: anchors = _anchors;
-
-```
-[DNSSECImpl.sol#L55](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/DNSSECImpl.sol#L55)
-
 ##
 
 ## [G-2] Using storage instead of memory for structs/arrays saves gas
 
-> Instances()
+> Instances(3)
 
-> Approximate gas saved: 
+> Approximate gas saved: 6300 gas 
 
 When fetching data from a storage location, assigning the data to a memory variable causes all fields of the struct/array to be read from storage, which incurs a Gcoldsload (2100 gas) for each field of the struct/array. If the fields are read from the new memory variable, they incur an additional MLOAD rather than a cheap stack read. Instead of declearing the variable with the memory keyword, declaring the variable with the storage keyword and caching any fields that need to be re-read in stack variables, will be much cheaper, only incuring the Gcoldsload for the fields actually read. The only time it makes sense to read the whole struct/array into a memory variable, is if the full struct/array is being returned by the function, is being passed to a function that requires memory, or if the array/struct is being read from another memory array/struct
 
@@ -70,8 +65,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
 ## [G-3] Multiple address/ID mappings can be combined into a single mapping of an address/ID to a struct, where appropriate
 
-> Instances()
-> Instances()
+> Instances(1)
 
 Saves a storage slot for the mapping. Depending on the circumstances and sizes of types, can avoid a Gsset (20000 gas) per mapping combined. Reads and subsequent writes can also be cheaper when a function requires both values and they both fit in the same storage slot. Finally, if both fields are accessed in the same function, can save ~42 gas per access due to [not having to recalculate the key’s keccak256 hash](https://gist.github.com/IllIllI000/ec23a57daa30a8f8ca8b9681c8ccefb0) (Gkeccak256 - 30 gas) and that calculation’s associated stack operations.
 
@@ -87,6 +81,8 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 ##
 
 ## [G-4] For events use 3 indexed rule to save gas
+
+> Instances(2)
 
 Need to declare 3 indexed fields for event parameters. If the event parameter is less than 3 should declare all event parameters indexed
 
@@ -109,7 +105,7 @@ FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 
 ## [G-5] Lack of input value checks cause a redeployment if any human/accidental errors
 
-> Instances()
+> Instances(4)
 
 Devoid of sanity/threshold/limit checks, critical parameters can be configured to invalid values, causing a variety of issues and breaking expected interactions within/between contracts. Consider adding proper uint256 validation. A worst case scenario would render the contract needing to be re-deployed in the event of human/accidental errors that involve value assignments to immutable variables.
 
@@ -161,9 +157,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 
 ## [G-6] Use nested if and, avoid multiple check combinations
 
-> Instances()
-
-> Approximate Gas Saved:  gas
+> Instances(2)
 
 Using nested is cheaper than using && multiple check combinations. There are more advantages, such as easier to read code and better coverage reports.
 
@@ -189,7 +183,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
 ## [G-7] Unnecessary look up in if condition
 
-> Instances()
+> Instances(7)
 
 If the || condition isn’t required, the second condition will have been looked up unnecessarily.
 
@@ -241,7 +235,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 
 ## [G-8] Don't declare the variable inside the loops
 
-> Instances()
+> Instances(3)
 
 In every iterations the new variables instance created this will consumes more gas . So just declare variables outside the loop and only use inside to save gas
 
@@ -279,7 +273,7 @@ https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d173827
 
 ## [G-9] Functions should be used instead of modifiers to save gas
 
-> Instances()
+> Instances(1)
 
 ```solidity
 File; 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
@@ -298,7 +292,7 @@ modifier onlyOwner() {
 
 ## [G-10] Sort Solidity operations using short-circuit mode
 
-> Instances(3)
+> Instances(5)
 
 Short-circuiting is a solidity contract development model that uses OR/AND logic to sequence different cost operations. It puts low gas cost operations in the front and high gas cost operations in the back, so that if the front is low If the cost operation is feasible, you can skip (short-circuit) the subsequent high-cost Ethereum virtual machine operation.
 
@@ -348,7 +342,7 @@ if (
 
 ## [G-11] Use assembly to check for address(0)
 
-> Instances()
+> Instances(7)
 
 Saves 6 gas per instance
 
@@ -384,7 +378,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 
 ## [G-12] Shorthand way to write if / else statement can reduce the deployment cost
 
-> Instances()
+> Instances(4)
 
 ```solidity
 FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
@@ -450,7 +444,7 @@ separator < lastIdx ? parentNode = textNamehash(name, separator + 1, lastIdx); :
 
 ## [G-13] The Less gas consuming condition checks should be on top
 
-> Instances()
+> Instances(1)
 
 When writing conditional statements in smart contracts, it is generally best practice to order the conditions so that the less gas-consuming checks are performed first. This can help to optimize the gas usage of the contract and improve its overall efficiency
 
@@ -474,7 +468,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
 ## [G-14] internal functions not called by the contract should be removed to save deployment gas
 
-> Instances()
+> Instances(3)
 
 If the functions are required by an interface, the contract should inherit from that interface and use the override keyword
 
@@ -505,6 +499,8 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
 ## [G-15] Modifiers or private functions only called once can be inlined to save gas 
 
+Instances (2)
+
 ITs possible to save 40-50 gas 
 
 ```solidity
@@ -526,6 +522,8 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/BytesUtils.sol
 ##
 
 ## [G-16] NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
+
+Instances (12)
 
 ```solidity
 FILE:  2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
@@ -626,6 +624,8 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 
 ## [G-17] Use constants instead of type(uintx).max
 
+Instances (5):
+
 type(uint256).max it uses more gas in the distribution process and also for each transaction than constant usage
 
 ```solidity
@@ -651,6 +651,8 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/BytesUtils.sol
 ##
 
 ## [G-18] Instead of calculating bytes32(0) every time inside the contract its possible to use constants to reduce the gas cost 
+
+Instances (1)
 
 By defining a constant variable, you can avoid computing the value of bytes32(0) every time it is used in your contract. Instead, you can simply reference the constant variable, which will have the same value as bytes32(0)
 
