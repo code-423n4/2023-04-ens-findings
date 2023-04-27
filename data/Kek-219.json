@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "Kek",
+  "risk": "2",
+  "title": "RRUtils.serialNumberGte() edge cases may result in inaccurate return values due to unchecked subtraction and uint32() -> int32() casting",
+  "issueId": 219,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/219"
+}
