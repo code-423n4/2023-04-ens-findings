@@ -1,6 +1,34 @@
 
 # GAS OPTIMIZATION
 
+| Gas Count| Issues| Instances| Gas Saved|
+|-------|-----|--------|--------|
+| [G-1] | State variable value only set in the constructor can be declared as a constants to save large volume of the gas   | 1 | 90000 |
+| [G-2] | State variables only set in the constructor should be declared immutable  | 1 | 20000 |
+| [G-3] | Using storage instead of memory for structs/arrays saves gas  | 3 | 6300 |
+| [G-4] | Multiple address/ID mappings can be combined into a single mapping of an address/ID to a struct, where appropriate  | 1 | - |
+| [G-5] | For events use 3 indexed rule to save gas  | 3 | - |
+| [G-6] | Lack of input value checks cause a redeployment if any human/accidental errors | 4 | - |
+| [G-7] | Use nested if and, avoid multiple check combinations  | 2 | 18 |
+| [G-8] | Unnecessary look up in if condition  | 7 | - |
+| [G-9] | Don't declare the variable inside the loops  | 3 | - |
+| [G-10] | Functions should be used instead of modifiers to save gas  | 1 | - |
+| [G-11] | Sort Solidity operations using short-circuit mode  | 5 | - |
+| [G-12] | Use assembly to check for address(0)  | 7 | 42 |
+| [G-13] | Shorthand way to write if / else statement can reduce the deployment cost| 4 | - |
+| [G-14] | The Less gas consuming condition checks should be on top  | 1 | - |
+| [G-15] | nternal functions not called by the contract should be removed to save deployment gas  | 3 | - |
+| [G-16] | Modifiers or private functions only called once can be inlined to save gas | 2 | 80 |
+| [G-17] | NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS  | 12 | - |
+| [G-18] | Use constants instead of type(uintx).max  | 5 | - |
+| [G-19] | Instead of calculating bytes32(0) every time inside the contract its possible to use constants to reduce the gas cost   | 1 | - |
+| [G-20] | Structs can be packed into fewer storage slots  | 1 | 40000 |
+
+
+### TOTAL INSTANCES : 67 
+
+## APROXIMATE GAS SAVED: 156000 gas  
+
 ##
 
 ## [G-1] State variable value only set in the constructor can be declared as a constants to save large volume of the gas 
@@ -29,7 +57,28 @@ FILE: 2023-04-ens/contracts/dnsregistrar/OffchainDNSResolver.sol
 
 ##
 
-## [G-2] Using storage instead of memory for structs/arrays saves gas
+## [G-2] State variables only set in the constructor should be declared immutable
+
+> Instances(1)
+
+> Approximate Gas saved : 20000 gas 
+
+Avoids a Gsset (20000 gas) in the constructor, and replaces the first access in each transaction (Gcoldsload - 2100 gas) and each access thereafter (Gwarmacces - 100 gas) with a PUSH32 (3 gas).
+
+While strings are not value types, and therefore cannot be immutable/constant if not hard-coded outside of the constructor, the same behavior can be achieved by making the current contract abstract with virtual functions for the string accessors, and having a child contract override the functions with the hard-coded implementation-specific values
+
+
+> In parent contract DNSSEC.sol the variable "anchors" should be declared immutable . The anchors value is only set inside the DNSSECImpl contract constructor 
+
+```solidity
+FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
+
+55:  anchors = _anchors;
+
+```
+[DNSSECImpl.sol#L55](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/DNSSECImpl.sol#L55)
+
+## [G-3] Using storage instead of memory for structs/arrays saves gas
 
 > Instances(3)
 
@@ -63,7 +112,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
 ##
 
-## [G-3] Multiple address/ID mappings can be combined into a single mapping of an address/ID to a struct, where appropriate
+## [G-4] Multiple address/ID mappings can be combined into a single mapping of an address/ID to a struct, where appropriate
 
 > Instances(1)
 
@@ -80,7 +129,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 
 ##
 
-## [G-4] For events use 3 indexed rule to save gas
+## [G-5] For events use 3 indexed rule to save gas
 
 > Instances(2)
 
@@ -103,7 +152,7 @@ FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 
 ##
 
-## [G-5] Lack of input value checks cause a redeployment if any human/accidental errors
+## [G-6] Lack of input value checks cause a redeployment if any human/accidental errors
 
 > Instances(4)
 
@@ -155,7 +204,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 
 ##
 
-## [G-6] Use nested if and, avoid multiple check combinations
+## [G-7] Use nested if and, avoid multiple check combinations
 
 > Instances(2)
 
@@ -181,7 +230,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
 ##
 
-## [G-7] Unnecessary look up in if condition
+## [G-8] Unnecessary look up in if condition
 
 > Instances(7)
 
@@ -233,7 +282,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 ##
 
 
-## [G-8] Don't declare the variable inside the loops
+## [G-9] Don't declare the variable inside the loops
 
 > Instances(3)
 
@@ -271,7 +320,7 @@ https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d173827
 
 ##
 
-## [G-9] Functions should be used instead of modifiers to save gas
+## [G-10] Functions should be used instead of modifiers to save gas
 
 > Instances(1)
 
@@ -290,7 +339,7 @@ modifier onlyOwner() {
 
 ##
 
-## [G-10] Sort Solidity operations using short-circuit mode
+## [G-11] Sort Solidity operations using short-circuit mode
 
 > Instances(5)
 
@@ -340,7 +389,7 @@ if (
 
 ##
 
-## [G-11] Use assembly to check for address(0)
+## [G-12] Use assembly to check for address(0)
 
 > Instances(7)
 
@@ -376,7 +425,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 
 ##
 
-## [G-12] Shorthand way to write if / else statement can reduce the deployment cost
+## [G-13] Shorthand way to write if / else statement can reduce the deployment cost
 
 > Instances(4)
 
@@ -442,7 +491,7 @@ separator < lastIdx ? parentNode = textNamehash(name, separator + 1, lastIdx); :
 
 ##
 
-## [G-13] The Less gas consuming condition checks should be on top
+## [G-14] The Less gas consuming condition checks should be on top
 
 > Instances(1)
 
@@ -466,7 +515,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
 ##
 
-## [G-14] internal functions not called by the contract should be removed to save deployment gas
+## [G-15] internal functions not called by the contract should be removed to save deployment gas
 
 > Instances(3)
 
@@ -497,7 +546,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
 ##
 
-## [G-15] Modifiers or private functions only called once can be inlined to save gas 
+## [G-16] Modifiers or private functions only called once can be inlined to save gas 
 
 Instances (2)
 
@@ -521,7 +570,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/BytesUtils.sol
 
 ##
 
-## [G-16] NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
+## [G-17] NOT USING THE NAMED RETURN VARIABLES WHEN A FUNCTION RETURNS, WASTES DEPLOYMENT GAS
 
 Instances (12)
 
@@ -622,7 +671,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 
 ##
 
-## [G-17] Use constants instead of type(uintx).max
+## [G-18] Use constants instead of type(uintx).max
 
 Instances (5):
 
@@ -650,7 +699,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/BytesUtils.sol
 
 ##
 
-## [G-18] Instead of calculating bytes32(0) every time inside the contract its possible to use constants to reduce the gas cost 
+## [G-19] Instead of calculating bytes32(0) every time inside the contract its possible to use constants to reduce the gas cost 
 
 Instances (1)
 
@@ -664,13 +713,38 @@ FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 188: if (parentNode == bytes32(0)) {
 189: Root root = Root(ens.owner(bytes32(0)));
 
-
 ```
-
 [DNSRegistrar.sol#L74](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnsregistrar/DNSRegistrar.sol#L74)
 
 ##
 
+## [G-20] Structs can be packed into fewer storage slots
+
+> Instances (1)
+
+> Aproximate Gas Saved: 40000 gas (2 Slots)
+
+As the solidity EVM works with 32 bytes, variables less than 32 bytes should be packed inside a struct so that they can be stored in the same slot, this saves gas when writing to storage ~20000 gas
+
+For offset,rdataOffset,nextOffset variables uint128 alone enough. So we can avoid 2 slots (40000 gas )
+
+```solidity
+2023-04-ens/contracts/dnssec-oracle/RRUtils.sol
+
+  120: struct RRIterator {
+  121:        bytes data;
++ 122:        uint128 offset;
+- 122:        uint256 offset;
+  123:        uint16 dnstype;
+  124:        uint16 class;
+  125:        uint32 ttl;
++ 126:        uint128 rdataOffset;
++ 127:        uint128 nextOffset;
+- 126:        uint256 rdataOffset;
+- 127:        uint256 nextOffset;
+  128:    }
+
+```
 
 
 
@@ -678,29 +752,6 @@ FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 
 
 
-GAS‑1	abi.encode() is less efficient than abi.encodepacked()	1	100
-GAS‑2	<array>.length Should Not Be Looked Up In Every Loop Of A For-loop	2	194
-GAS‑3	Use calldata instead of memory for function parameters	6	1800
-GAS‑4	Setting the constructor to payable	3	39
-GAS‑5	Duplicated require()/revert() Checks Should Be Refactored To A Modifier Or Function	2	56
-GAS‑6	Using delete statement can save gas	10	-
-GAS‑7	++i Costs Less Gas Than i++, Especially When It’s Used In For-loops (--i/i-- Too)	5	30
-GAS‑8	Functions guaranteed to revert when called by normal users can be marked payable	3	63
-GAS‑9	Use hardcoded address instead address(this)	4	-
-GAS‑10	It Costs More Gas To Initialize Variables To Zero Than To Let The Default Of Zero Be Applied	4	-
-GAS‑11	internal functions only called once can be inlined to save gas	63	1386
-GAS‑12	Optimize names to save gas	9	198
-GAS‑13	<x> += <y> Costs More Gas Than <x> = <x> + <y> For State Variables	25	-
-GAS‑14	Public Functions To External	6	-
-GAS‑15	require() Should Be Used Instead Of assert()	3	-
-GAS‑16	require()/revert() Strings Longer Than 32 Bytes Cost Extra Gas	3	-
-GAS‑17	Save gas with the use of specific import statements	44	-
-GAS‑18	Shorten the array rather than copying to a new one	1	-
-GAS‑19	Splitting require() Statements That Use && Saves Gas	1	9
-GAS‑20	Help The Optimizer By Saving A Storage Variable’s Reference Instead Of Repeatedly Fetching It	1	-
-GAS‑21	Usage of uints/ints smaller than 32 bytes (256 bits) incurs overhead	40	-
-GAS‑22	++i/i++ Should Be unchecked{++i}/unchecked{i++} When It Is Not Possible For Them To Overflow, As Is The Case When Used In For- And While-loops	7	245
-GAS‑23	Using unchecked blocks to save gas	4	80
-GAS‑24	Use v4.8.1 OpenZeppelin contracts	1	-
-GAS‑25	Use solidity version 0.8.19 to gain some gas boost	19	1672
-GAS‑26	Use uint256(1)/uint256(2) instead for true and false boolean states	2	10000
+
+
+
