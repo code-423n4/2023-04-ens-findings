@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "Trust",
+  "risk": "2",
+  "title": "Invalid addresses will be accepted as resolvers, possibly bricking assets",
+  "issueId": 258,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/258"
+}
