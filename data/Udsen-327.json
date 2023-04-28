@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "Udsen",
+  "risk": "2",
+  "title": "`length` OF THE BYTES ARRAY IS NOT CHECKED BEFORE SUBSTRING IS EXTRACTED FROM IT, WHICH COULD LEAD TO SUBSTRING OF `bytes(0)`",
+  "issueId": 327,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/327"
+}
