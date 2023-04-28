@@ -1,4 +1,4 @@
-## constants should be defined rather than using magic numbers
+## [N-01] constants should be defined rather than using magic numbers
 
 Even [assembly](https://github.com/code-423n4/2022-05-opensea-seaport/blob/9d7ce4d08bf3c3010304a0476a785c70c0e90ae7/contracts/lib/TokenTransferrer.sol#L35-L39) can benefit from using readable constants instead of hex/numeric literals.
 
@@ -766,9 +766,11 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/utils/NameEncoder.
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/utils/HexUtils.sol
 
-## Use named parameters for mapping type declarations
+## [N-02] Use named parameters for mapping type declarations
 
 Consider using named parameters in mappings (e.g. mapping(address account => uint256 balance)) to improve readability. This feature is present since Solidity 0.8.18.
+
+There are 3 instances of this issue in 2 files:
 
     File: contracts/dnsregistrar/DNSRegistrar.sol
 
@@ -784,9 +786,11 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSRe
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/DNSSECImpl.sol
 
-## Use a modifier for access control
+## [N-03] Use a modifier for access control
 
 Consider using a modifier to implement access control instead of inlining the condition/requirement in the function’s body.
+
+There is 1 instance of this issue in 1 file:
 
     File: contracts/dnsregistrar/DNSRegistrar.sol
 
@@ -796,28 +800,7 @@ Consider using a modifier to implement access control instead of inlining the co
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSRegistrar.sol
 
-## Lack of address(0) checks in the constructor
-
-Zero-address check should be used in the constructors, to avoid the risk of setting smth as address(0) at deploying time.
-
-    File: contracts/dnsregistrar/DNSRegistrar.sol
-
-    55: constructor(
-    56:     address _previousRegistrar,
-    57:     address _resolver,
-    58:     DNSSEC _dnssec,
-    59:     PublicSuffixList _suffixes,
-    60:     ENS _ens
-    61: ) {
-    62:     previousRegistrar = _previousRegistrar;
-    63:     resolver = _resolver;
-    64:     oracle = _dnssec;
-    65:     suffixes = _suffixes;
-    66:     emit NewPublicSuffixList(address(suffixes));
-    67:     ens = _ens;
-    68: }
-
-## Use a single file for all system-wide constants
+## [N-04] Use a single file for all system-wide constants
 
 There are many addresses and constants used in the system. It is recommended to put the most used ones in one file (for example constants.sol, use inheritance to access these values).
 
@@ -826,9 +809,12 @@ This will help with readability and easier maintenance for future changes. This 
 constants.sol
 Use and import this file in contracts that require access to these values. This is just a suggestion, in some use cases this may result in higher gas usage in the distribution.
 
+There are 32 instances of this issue in 6 files:
+
     File: contracts/dnsregistrar/DNSClaimChecker.sol
 
     16: uint16 constant CLASS_INET = 1;
+
     17: uint16 constant TYPE_TXT = 16;
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSClaimChecker.sol
@@ -836,6 +822,7 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSCl
     File: contracts/dnsregistrar/OffchainDNSResolver.sol
 
     29: uint16 constant CLASS_INET = 1;
+
     30: uint16 constant TYPE_TXT = 16;
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/OffchainDNSResolver.sol
@@ -849,20 +836,35 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/Byte
     File: contracts/dnssec-oracle/RRUtils.sol
 
     72: uint256 constant RRSIG_TYPE = 0;
+
     73: uint256 constant RRSIG_ALGORITHM = 2;
+
     74: uint256 constant RRSIG_LABELS = 3;
+
     75: uint256 constant RRSIG_TTL = 4;
+
     76: uint256 constant RRSIG_EXPIRATION = 8;
+
     77: uint256 constant RRSIG_INCEPTION = 12;
+
     78: uint256 constant RRSIG_KEY_TAG = 16;
+
     79: uint256 constant RRSIG_SIGNER_NAME = 18;
+
     210: uint256 constant DNSKEY_FLAGS = 0;
+
     211: uint256 constant DNSKEY_PROTOCOL = 2;
+
     212: uint256 constant DNSKEY_ALGORITHM = 3;
+
     213: uint256 constant DNSKEY_PUBKEY = 4;
+
     236: uint256 constant DS_KEY_TAG = 0;
+
     237: uint256 constant DS_ALGORITHM = 2;
+
     238: uint256 constant DS_DIGEST_TYPE = 3;
+
     239: uint256 constant DS_DIGEST = 4;
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/RRUtils.sol
@@ -870,11 +872,17 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/RRUt
     File: contracts/dnssec-oracle/algorithms/EllipticCurve.sol
 
     21: uint256 constant a =
+
     23: uint256 constant b =
+
     25: uint256 constant gx =
+
     27: uint256 constant gy =
+
     29: uint256 constant p =
+
     31: uint256 constant n =
+
     34: uint256 constant lowSmax =
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
@@ -882,13 +890,16 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/algo
     File: contracts/dnssec-oracle/DNSSECImpl.sol
 
     27: uint16 constant DNSCLASS_IN = 1;
+
     29: uint16 constant DNSTYPE_DS = 43;
+
     30: uint16 constant DNSTYPE_DNSKEY = 48;
+
     32: uint256 constant DNSKEY_FLAG_ZONEKEY = 0x100;
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/DNSSECImpl.sol
 
-## Assembly Codes Specific – Should Have Comments
+## [N-05] Assembly Codes Specific – Should Have Comments
 
 Since this is a low level language that is more difficult to parse by readers, include extensive documentation, comments on the rationale behind its use, clearly explaining what each assembly instruction does.
 
@@ -896,18 +907,30 @@ This will make it easier for users to trust the code, for reviewers to validate 
 
 Note that using Assembly removes several important security features of Solidity, which can make the code more insecure and more error-prone.
 
+There are 15 instances of this issue in 5 files:
+
     File: contracts/dnssec-oracle/BytesUtils.sol
 
     19: assembly {
+
     73: assembly {
+
     80: assembly {
+
     197: assembly {
+
     213: assembly {
+
     229: assembly {
+
     245: assembly {
+
     267: assembly {
+
     276: assembly {
+
     286: assembly {
+
     311: assembly {
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/BytesUtils.sol
@@ -936,14 +959,18 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/SHA1
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/utils/HexUtils.sol
 
-## Take advantage of Custom Error’s return value property
+## [N-06] Take advantage of Custom Error’s return value property
 
 An important feature of Custom Error is that values such as address, tokenID, msg.value can be written inside the () sign, this kind of approach provides a serious advantage in debugging and examining the revert details of dapps such as tenderly.
+
+There are 4 instances of this issue in 2 files:
 
     File: contracts/dnsregistrar/DNSRegistrar.sol
 
     34: error NoOwnerRecordFound();
+
     36: error PreconditionNotMet();
+
     37: error StaleProof();
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSRegistrar.sol
@@ -954,7 +981,7 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSRe
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/DNSSECImpl.sol
 
-## Inconsistent Solidity Versions
+## [N-07] Inconsistent Solidity Versions
 
 Different Solidity compiler versions are used, the following contracts mix versions:
 
@@ -1066,7 +1093,7 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/utils/NameEncoder.
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/utils/HexUtils.sol
 
-## Inconsistent method of specifying a floating pragma
+## [N-08] Inconsistent method of specifying a floating pragma
 
 Some files use >=, some use ^. The instances below are examples of the method that has the fewest instances for a specific version. Note that using >= without also specifying <= will lead to failures to compile, or external project incompatability, when the major version changes and there are breaking-changes, so ^ should be preferred regardless of the instance counts
 
@@ -1078,7 +1105,9 @@ There is 1 instance of this issue:
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/SHA1.sol
 
-## File does not contain an SPDX Identifier
+## [N-09] File does not contain an SPDX Identifier
+
+There are 11 instances of this issue in 11 files:
 
     File: contracts/dnssec-oracle/BytesUtils.sol
 
@@ -1146,10 +1175,12 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/dige
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/SHA1.sol
 
-## Events is missing indexed fields
+## [N-10] Events is missing indexed fields
 
 Index event fields make the field more quickly accessible to off-chain.
 Each event should use three indexed fields if there are three or more fields.
+
+There are 3 instances of this issue in 2 files:
 
     File: contracts/dnsregistrar/DNSRegistrar.sol
 
@@ -1170,7 +1201,9 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSRe
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/SHA1.sol
 
-## No same value input control
+## [N-11] No same value input control
+
+There are 3 instances of this issue in 2 files:
 
     File: contracts/dnsregistrar/DNSRegistrar.sol
 
@@ -1195,8 +1228,7 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSRe
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/DNSSECImpl.sol
 
-
-## Contract Owner Has Too Many Privileges
+## [N-12] Contract Owner Has Too Many Privileges
 
 The owner of the contracts has too many privileges relative to standard users. The consequence is disastrous if the contract owner’s private key has been compromised. And, in the event the key was lost or unrecoverable, no implementation upgrades and system parameter updates will ever be possible.
 
@@ -1205,10 +1237,79 @@ For a project this grand, it increases the likelihood that the owner will be tar
 Transfer ownership and mess up with all the setter functions, hijacking the entire protocol.
 
 Consider:
+-- Splitting privileges (e.g. via the multisig option) to ensure that no one address has excessive ownership of the system
+-- Clearly documenting the functions and implementations the owner can change
+-- Documenting the risks associated with privileged users and single points of failure
+-- Ensuring that users are aware of all the risks associated with the system
 
-+ Splitting privileges (e.g. via the multisig option) to ensure that no one address has excessive ownership of the system
-+ Clearly documenting the functions and implementations the owner can change
-+ Documenting the risks associated with privileged users and single points of failure
-+ Ensuring that users are aware of all the risks associated with the system
+## [N-13] Typo
+
+There is 1 instance of this issue in 1 file: 
+
+    File: contracts/dnssec-oracle/BytesUtils.sol
+    
+    /// @audit rune 
+    42: *      contents of the two bytes are equal. Comparison is done per-rune,
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/BytesUtils.sol
+
+## [N-14] Inconsistent method of specifying NatSpec
+
+At some place /** is used while at other places /* have been used. It is recommended to use /** method. 
+
+There are 15 instances of this issue in 2 files:
+
+    File: contracts/dnssec-oracle/BytesUtils.sol
+
+    6: /*
+    7:  * @dev Returns the keccak-256 hash of a byte range.
+
+    24: /*
+    25:  * @dev Returns a positive number if `other` comes lexicographically after
+
+    39: /*
+    40:  * @dev Returns a positive number if `other` comes lexicographically after
+
+    102: /*
+    103:  * @dev Returns true if the two byte ranges are equal.
+
+    121 /*
+    122: * @dev Returns true if the two byte ranges are equal with offsets.
+
+    140: /*
+    141:  * @dev Compares a range of 'self' to all of 'other' and returns True iff
+
+    158: /*
+    159:  * @dev Returns true if the two byte ranges are equal.
+
+    173: /*
+    174:  * @dev Returns the 8-bit number at the specified index of self.
+
+    186: /*
+    187:  * @dev Returns the 16-bit number at the specified index of self.
+
+    202: /*
+    203:  * @dev Returns the 32-bit number at the specified index of self.
+
+    218: /*
+    219:  * @dev Returns the 32 byte value at the specified index of self.
+
+    232: /*
+    233:  * @dev Returns the 32 byte value at the specified index of self.
+
+    253: /*
+    254:  * @dev Returns the n byte value at the specified index of self.
+
+    294: /*
+    295:  * @dev Copies a substring into a new byte string.
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/BytesUtils.sol
+
+    File: contracts/dnssec-oracle/DNSSECImpl.sol
+
+    13: /*
+    14:  * @dev An oracle contract that verifies and stores DNSSEC-validated DNS records.
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/DNSSECImpl.sol
 
 
