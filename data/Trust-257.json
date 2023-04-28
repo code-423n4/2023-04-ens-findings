@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "Trust",
+  "risk": "3",
+  "title": "Claiming of domains will likely be locked due to a bad check in _enableNode",
+  "issueId": 257,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/257"
+}
