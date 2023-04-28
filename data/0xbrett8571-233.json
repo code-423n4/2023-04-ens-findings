@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "0xbrett8571",
+  "risk": "3",
+  "title": "High Gas Costs Due to Unnecessary String Iteration in HexUtils Library's hexStringToBytes32() Function.",
+  "issueId": 233,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/233"
+}
