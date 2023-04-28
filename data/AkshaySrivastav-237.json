@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "AkshaySrivastav",
+  "risk": "2",
+  "title": "`BytesUtils.keccak` does not revert when `offset` is out of bounds",
+  "issueId": 237,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/237"
+}
