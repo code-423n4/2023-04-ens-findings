@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "0xbrett8571",
+  "risk": "2",
+  "title": "Missing 'view' modifier in IDNSGateway interface in OffchainDNSResolver contract.",
+  "issueId": 223,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/223"
+}
