@@ -31,7 +31,7 @@ ens\DNSClaimChecker.sol
 validate the parseRR() function to check if the given data size exceeds the allowed limit
 
 ## consider on resolveCallback() and resolve() can call back
-One reason why resolveCallback() and resolve() can call back is because OffchainDNSResolver relies on two functions to help build a query to retrieve data from the DNS server: the resolve() function to send the actual DNS request and the resolveCallback() function to take care of parsing the results returned from the DNS server. Since these two functions are an integral part of the main function of the contract, it is possible that the resolveCallback() and resolve() functions may require a callback to complete the execution of a DNS query which requires several stages of data processing.
+resolveCallback() and resolve() can call back is because OffchainDNSResolver relies on two functions to help build a query to retrieve data from the DNS server: the resolve() function to send the actual DNS request and the resolveCallback() function to take care of parsing the results returned from the DNS server. Since these two functions are an integral part of the main function of the contract, it is possible that the resolveCallback() and resolve() functions may require a callback to complete the execution of a DNS query which requires several stages of data processing.
 
 ``` solidity
 ens\OffchainDNSResolver.sol
