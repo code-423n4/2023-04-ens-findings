@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "Udsen",
+  "risk": "2",
+  "title": "`DNS wire format` AND `DNS label-sequence format` ARE USED INTERCHANGABLY TO REPRESENT DOMAIN NAMES DURING `RRSet` VALIDATION",
+  "issueId": 320,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/320"
+}
