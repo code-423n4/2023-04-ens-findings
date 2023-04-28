@@ -1,15 +1,16 @@
 # QA Report for ENS Contest
 
 ## Overview
-During the audit, 1 low, 6 non-critical and 3 refactoring issues were found.
+During the audit, 2 low, 6 non-critical and 3 refactoring issues were found.
 
 ### Low Risk Issues
 
-Total: 1 instances over 1 issues
+Total: 2 instances over 2 issues
 
 |#|Issue|Instances|
 |-|:-|:-:|
 | [L-01] | `BytesUtils.equals` reverts if input length is less then offset | 1 |
+| [L-02] | `DNSRegistrar.proveAndClaimWithResolver` always sets subnode record TTL to 0 | 1 |
 
 ### Refactoring Issues
 
@@ -36,7 +37,7 @@ Total: 30 instances over 6 issues
 
 #
 
-## Low Risk Issues (1)
+## Low Risk Issues (2)
 
 #
 
@@ -71,6 +72,39 @@ Modify function to check if offset > length and either:
 -  set offset = length
 
 Or modify function to revert with meaningful message
+
+#
+
+### [L-02] `DNSRegistrar.proveAndClaimWithResolver` always sets subnode record TTL to 0
+##### Description
+
+Function `proveAndClaimWithResolver` from `DNSRegistrar` always sets subnode record TTL to 0.
+
+[Link to code](https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSRegistrar.sol#L114)
+```Solidity
+        ens.setSubnodeRecord(rootNode, labelHash, owner, resolver, 0);
+```
+
+`setSubnodeRecord` will continue execution and arrive at `_setResolverAndTTL` where the TTL is set regardless of value.
+
+[Link to code](https://github.com/code-423n4/2023-04-ens/blob/main/contracts/registry/ENSRegistry.sol#L212-L214)
+```Solidity
+        if (ttl != records[node].ttl) {
+            records[node].ttl = ttl;
+            emit NewTTL(node, ttl);
+```
+
+Depending on how TTL will be used in the future, this severely impacts protocol.
+
+##### Instances (1)
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSRegistrar.sol#L114
+
+##### Recommendation
+
+Suggestions:
+- provide a TTL as input/default value for claiming
+- retrieve previous TTL from registry and set that.
 
 #
 
