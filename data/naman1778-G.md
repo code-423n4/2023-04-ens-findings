@@ -29,7 +29,7 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSRe
         }
     }
 
-    contract Contract0 {d
+    contract Contract0 {
 
         address owner;
         function setOwnerAssembly(address _owner) public {
