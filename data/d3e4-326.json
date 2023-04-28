@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "d3e4",
+  "risk": "3",
+  "title": "SHA-1 chosen prefix collision",
+  "issueId": 326,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/326"
+}
