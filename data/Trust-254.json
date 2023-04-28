@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "Trust",
+  "risk": "2",
+  "title": "Offchain resolver can be subject to man in the middle attacks",
+  "issueId": 254,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/254"
+}
