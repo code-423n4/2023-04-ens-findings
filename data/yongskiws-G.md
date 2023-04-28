@@ -33,7 +33,7 @@ after
 TestBytesUtils  || 2192177 || 7.3 %
 
 ``` diff
-File: c:\Users\user\Desktop\mentahan\ens\BytesUtils.sol
+ens\BytesUtils.sol
 +unchecked{
 90:           mask = ~(2 ** (8 * (idx + 32 - shortest)) - 1);
 +}
@@ -120,7 +120,7 @@ Here, changing to bytes calldata will decrease the gas. The total savings for th
 
 
 ``` solidity
-File: c:\Users\user\Desktop\mentahan\ens\BytesUtils.sol
+ens\BytesUtils.sol
 341:         for (uint256 i = 0; i < len; i++) {
 342:             bytes1 char = self[off + i];
 343:             require(char >= 0x30 && char <= 0x7A);
@@ -133,7 +133,7 @@ File: c:\Users\user\Desktop\mentahan\ens\BytesUtils.sol
 350:         }
 
 
-File: c:\Users\user\Desktop\mentahan\ens\DNSSECImpl.sol
+ens\DNSSECImpl.sol
 118:         for (uint256 i = 0; i < input.length; i++) {
 119:             RRUtils.SignedSet memory rrset = validateSignedSet(
 120:                 input[i],
@@ -145,7 +145,7 @@ File: c:\Users\user\Desktop\mentahan\ens\DNSSECImpl.sol
 126:         }
 
 
-File: c:\Users\user\Desktop\mentahan\ens\EllipticCurve.sol
+ens\EllipticCurve.sol
 325:         for (uint256 i = 0; i < exp; i++) {
 326:             (base2X, base2Y, base2Z) = twiceProj(base2X, base2Y, base2Z);
 327:         }
@@ -226,14 +226,14 @@ Short-circuiting is a solidity contract development model that uses OR/AND logic
 
 
 ``` solidity
-File: c:\Users\user\Desktop\mentahan\ens\DNSRegistrar.sol
+ens\DNSRegistrar.sol
 128:   return
 129:             interfaceID == type(IERC165).interfaceId ||
 130:             interfaceID == type(IDNSRegistrar).interfaceId;
 
 187:         if (owner == address(0) || owner == previousRegistrar) {
 
-File: c:\Users\user\Desktop\mentahan\ens\DNSSECImpl.sol
+ens\DNSSECImpl.sol
 201:                 if (
 202:                     name.length != iter.data.nameLength(iter.offset) ||
 203:                     !name.equals(0, iter.data, iter.offset, name.length)
@@ -273,7 +273,7 @@ The above should be modified to:
 
 ``` diff
 
-File: c:\Users\user\Desktop\mentahan\ens\BytesUtils.sol
+ens\BytesUtils.sol
 -341:         for (uint256 i = 0; i < len; i++) {
 +341:         for (uint256 i = 0; i < len;) {  
 342:             bytes1 char = self[off + i];
@@ -290,7 +290,7 @@ File: c:\Users\user\Desktop\mentahan\ens\BytesUtils.sol
 350:         }
 
 
-File: c:\Users\user\Desktop\mentahan\ens\DNSSECImpl.sol
+ens\DNSSECImpl.sol
 -118:         for (uint256 i = 0; i < input.length; i++) {
 +118:         for (uint256 i = 0; i < input.length;) {
 119:             RRUtils.SignedSet memory rrset = validateSignedSet(
@@ -306,7 +306,7 @@ File: c:\Users\user\Desktop\mentahan\ens\DNSSECImpl.sol
 126:         }
 
 
-File: c:\Users\user\Desktop\mentahan\ens\EllipticCurve.sol
+ens\EllipticCurve.sol
 -325:         for (uint256 i = 0; i < exp; i++) {
 +325:         for (uint256 i = 0; i < exp;) {
 326:             (base2X, base2Y, base2Z) = twiceProj(base2X, base2Y, base2Z);
@@ -325,18 +325,18 @@ When fetching data from a storage location, assigning the data to a memory varia
 
 ``` solidity
 
-File: c:\Users\user\Desktop\mentahan\ens\OffchainDNSResolver.sol
+ens\OffchainDNSResolver.sol
 53:         string[] memory urls = new string[](1);
 54:         urls[0] = gatewayURL;
 55: 
 
-File: c:\Users\user\Desktop\mentahan\ens\DNSClaimChecker.sol
+ens\DNSClaimChecker.sol
 24:   Buffer.buffer memory buf;
 
-File: c:\Users\user\Desktop\mentahan\ens\DNSClaimChecker.sol
+ens\DNSClaimChecker.sol
 30:             RRUtils.RRIterator memory iter = data.iterateRRs(0);
 
-File: c:\Users\user\Desktop\mentahan\ens\OffchainDNSResolver.sol
+ens\OffchainDNSResolver.sol
 53:         string[] memory urls = new string[](1);
 54:         urls[0] = gatewayURL;
 
@@ -351,11 +351,11 @@ Saves a storage slot for the mapping. Depending on the circumstances and sizes o
 
 ``` solidity
 
-File: c:\Users\user\Desktop\mentahan\ens\DNSRegistrar.sol
+ens\DNSRegistrar.sol
 32:     mapping(bytes32 => uint32) public inceptions;
 
 
-File: c:\Users\user\Desktop\mentahan\ens\DNSSECImpl.sol
+ens\DNSSECImpl.sol
 45:     mapping(uint8 => Algorithm) public algorithms;
 46:     mapping(uint8 => Digest) public digests;
 47: 
@@ -392,7 +392,7 @@ If the functions are required by an interface, the contract should inherit from 
 
 ``` solidity
 
-File: c:\Users\user\Desktop\mentahan\ens\DNSSECImpl.sol
+ens\DNSSECImpl.sol
 140:     function validateSignedSet(
 141:         RRSetWithSignature memory input,
 142:         bytes memory proof,
@@ -420,7 +420,7 @@ File: c:\Users\user\Desktop\mentahan\ens\DNSSECImpl.sol
 419:     ) internal view returns (bool) {
 
 
-File: c:\Users\user\Desktop\mentahan\ens\ModexpPrecompile.sol
+ens\ModexpPrecompile.sol
 7:     function modexp(
 8:         bytes memory base,
 9:         bytes memory exponent,
@@ -428,7 +428,7 @@ File: c:\Users\user\Desktop\mentahan\ens\ModexpPrecompile.sol
 11:     ) internal view returns (bool success, bytes memory output) {
 
 
-File: c:\Users\user\Desktop\mentahan\ens\OffchainDNSResolver.sol
+ens\OffchainDNSResolver.sol
 136:    function parseRR(
 137:         bytes memory data,
 138:         uint256 idx,
@@ -454,7 +454,7 @@ File: c:\Users\user\Desktop\mentahan\ens\OffchainDNSResolver.sol
 212:         uint256 lastIdx
 213:     ) internal view returns (bytes32) {
 
-File: c:\Users\user\Desktop\mentahan\ens\RSAVerify.sol
+ens\RSAVerify.sol
 14:     function rsarecover(
 15:         bytes memory N,
 16:         bytes memory E,
@@ -468,12 +468,12 @@ File: c:\Users\user\Desktop\mentahan\ens\RSAVerify.sol
 2 results - 1 files:
 
 ``` solidity
-File: c:\Users\user\Desktop\mentahan\ens\BytesUtils.sol
+ens\BytesUtils.sol
 95:             selfptr += 32;
 96:             otherptr += 32;
 
 
-File: c:\Users\user\Desktop\mentahan\ens\BytesUtils.sol
+ens\BytesUtils.sol
 279:             dest += 32;
 280:             src += 32;
 
@@ -495,22 +495,22 @@ The optimization works until solidity version 0.8.13 where there is a regression
 
 ``` solidity
 
-File: c:\Users\user\Desktop\mentahan\ens\DNSRegistrar.sol
+ens\DNSRegistrar.sol
 179:     if (len == 0) {
 
-File: c:\Users\user\Desktop\mentahan\ens\EllipticCurve.sol
+ens\EllipticCurve.sol
 410: if (P[2] == 0) {
 
-File: c:\Users\user\Desktop\mentahan\ens\NameEncoder.sol
+ens\NameEncoder.sol
 17:  if (length == 0) {
 
 39:  if (i == 0) {
 
-File: c:\Users\user\Desktop\mentahan\ens\DNSSECImpl.sol
+ens\DNSSECImpl.sol
 196:          if (name.length == 0) {
 
 
-File: c:\Users\user\Desktop\mentahan\ens\RRUtils.sol
+ens\RRUtils.sol
 28:    if (labelLen == 0) {
 
 64:        if (labelLen == 0) {
@@ -528,7 +528,7 @@ https://blog.soliditylang.org/2021/04/21/custom-errors/#errors-in-depth
 There are 14 instances of this issue:
 
 ``` solidity
-File: c:\Users\user\Desktop\mentahan\ens\BytesUtils.sol
+ens\BytesUtils.sol
 18:         require(offset + len <= self.length);
 196:    require(idx + 2 <= self.length);
 212:       require(idx + 4 <= self.length);
@@ -538,19 +538,19 @@ File: c:\Users\user\Desktop\mentahan\ens\BytesUtils.sol
 266:         require(idx + len <= self.length);
 337:      require(len <= 52);
 
-File: c:\Users\user\Desktop\mentahan\ens\DNSRegistrar.sol
+ens\DNSRegistrar.sol
 76:         require(msg.sender == owner);
 
-File: c:\Users\user\Desktop\mentahan\ens\P256SHA256Algorithm.sol
+ens\P256SHA256Algorithm.sol
 33:   require(data.length == 64, "Invalid p256 signature length");
 40:    require(data.length == 68, "Invalid p256 key length");
 
-File: c:\Users\user\Desktop\mentahan\ens\RRUtils.sol
+ens\RRUtils.sol
 381:             require(data.length <= 8192, "Long keys not permitted");
 
-File: c:\Users\user\Desktop\mentahan\ens\SHA1Digest.sol
+ens\SHA1Digest.sol
 17:   require(hash.length == 20, "Invalid sha1 hash length");
 
-File: c:\Users\user\Desktop\mentahan\ens\SHA256Digest.sol
+ens\SHA256Digest.sol
 16:  require(hash.length == 32, "Invalid sha256 hash length");
 ```
