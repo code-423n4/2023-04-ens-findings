@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "0xbrett8571",
+  "risk": "3",
+  "title": "OffchainDNSResolver Contract Missing onlyOwner Modifier in Constructor Can Lead to DNS Hijacking Attacks",
+  "issueId": 227,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/227"
+}
