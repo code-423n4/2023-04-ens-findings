@@ -1,5 +1,3 @@
-Number of issue in this report: 6
-
 # [L-01] Valid hex string is not decoded correctly by hexStringToBytes32 and reads memory out-of-boundary
 
 ## Links
@@ -335,3 +333,33 @@ n/a
 Either modify  the [base32HexTable](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L322-L323) so that it returns 0xFF when lowercase a-v characters are detected, or restrict the valid input range in [require(char >= 0x30 && char <= 0x7A);](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L343) to require(char >= 0x30 && char <= 0x56);
 
 The testBase32HexDecodeWord test in TestBytesUtils.sol will have to be updated to use uppercase characters.
+
+
+
+
+[NC-01] Incorrect bounds for decoded value
+
+In BytesUtils' base32HexDecodeWord, the decode table max value is 0x1F, therefore the [require(decoded <= 0x20)](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L345) should be replaced with require(decoded < 0x20)
+
+[NC-02] Out-of-bounds input range for decode table
+
+In BytesUtils' base32HexDecodeWord, the decode table [base32HexTable](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L322-L323) contains 71 indexable values.
+
+➜ bytes(hex"00010203040506070809FFFFFFFFFFFFFF0A0B0C0D0E0F101112131415161718191A1B1C1D1E1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF").length
+Type: uint
+├ Hex: 0x47
+└ Decimal: 71
+
+[Bounds](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L343-L344) are checked before accessing the table, but the math is wrong.
+
+```solidity
+            require(char >= 0x30 && char <= 0x7A);
+            decoded = uint8(base32HexTable[uint256(uint8(char)) - 0x30]);
+```
+
+if char is 0x7A or 'z', then the table is accessed at the index 0x7A - 0x30 which is 0x4A or 74 while the maximum index should be 0x46 or 70.
+
+Replace the bounds check with require(char >= 0x30 && char <= 0x46);
+
+
+max value is 0x1F, therefore the [require(decoded <= 0x20)](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L345) should be replaced with require(decoded < 0x20)
