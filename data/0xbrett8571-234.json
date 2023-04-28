@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "0xbrett8571",
+  "risk": "2",
+  "title": "Lack of Reason for Failure in hexToAddress() Function in HexUtils Library.",
+  "issueId": 234,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/234"
+}
