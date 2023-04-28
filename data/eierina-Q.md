@@ -1,3 +1,5 @@
+(Total issues in this report: 8)
+
 # [L-01] Valid hex string is not decoded correctly by hexStringToBytes32 and reads memory out-of-boundary
 
 ## Links
@@ -334,14 +336,11 @@ Either modify  the [base32HexTable](https://github.com/code-423n4/2023-04-ens/bl
 
 The testBase32HexDecodeWord test in TestBytesUtils.sol will have to be updated to use uppercase characters.
 
-
-
-
-[NC-01] Incorrect bounds for decoded value
+# [NC-01] Incorrect bounds for decoded value
 
 In BytesUtils' base32HexDecodeWord, the decode table max value is 0x1F, therefore the [require(decoded <= 0x20)](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L345) should be replaced with require(decoded < 0x20)
 
-[NC-02] Out-of-bounds input range for decode table
+# [NC-02] Out-of-bounds input range for decode table
 
 In BytesUtils' base32HexDecodeWord, the decode table [base32HexTable](https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/dnssec-oracle/BytesUtils.sol#L322-L323) contains 71 indexable values.
 
