@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "hasmama",
+  "risk": "3",
+  "title": "Unbounded Loop in DNS Name Encoder Library",
+  "issueId": 267,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/267"
+}
