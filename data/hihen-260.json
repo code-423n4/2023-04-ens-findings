@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "hihen",
+  "risk": "3",
+  "title": "Malicious users can exploit NameEncoder vulnerability to forge arbitrary names",
+  "issueId": 260,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/260"
+}
