@@ -1,5 +1,52 @@
  # LOW FINDINGS
 
+| LOW COUNT| ISSUES | INSTANCES|
+|-------|-----|--------|
+| [L-1]| Use abi.encode to convert safest way from uint values to bytes  | 3 |
+| [L-2]| Loss of precision due to rounding | 1 |
+| [L-3]| Consider using OpenZeppelin’s SafeCast library to prevent unexpected overflows when casting from uint256  | 11 |
+| [L-4]| MIXING AND OUTDATED COMPILER  | 7 |
+| [L-5]| abi.encodePacked() should not be used with dynamic types when passing the result to a hash function such as keccak256()  | 7 |
+| [L-6]| Lack of Sanity/Threshold/Limit Checks  | 2 |
+| [L-7]| Function Calls in Loop Could Lead to Denial of Service | 10 |
+| [L-8]| Project Upgrade and Stop Scenario should be  | - |
+| [L-9]| Front running attacks by the onlyOwner  | 3 |
+| [L-10]| Use BytesLib.sol library to safely covert bytes to uint256  | 2 |
+| [L-11]| Avoid infinite loops whenever possible  | 2 |
+| [L-12]| In the constructor, there is no return of incorrect address identification  | 6 |
+| [L-13]| Even with the onlyOwner or owner_only modifier, it is best practice to use the re-entrancy pattern  | 3 |
+
+ # NON CRITICAL FINDINGS
+
+| NC COUNT| ISSUES | INSTANCES|
+|-------|-----|--------|
+| [NC-1]| immutable should be uppercase  | 4 |
+| [NC-2]| Missing NATSPEC  | - |
+| [NC-3]| For functions, follow Solidity standard naming conventions (internal function style rule) | 28 |
+| [NC-4]| Need Fuzzing test for unchecked  | 5 |
+| [NC-5]| Remove commented out code  | - |
+| [NC-6]| Inconsistent method of specifying a floating pragma  | 8 |
+| [NC-7]| NO SAME VALUE INPUT CONTROL  | 1 |
+| [NC-8]| Constant redefined elsewhere  | - |
+| [NC-9]| According to the syntax rules, use => mapping ( instead of => mapping( using spaces as keyword| 3 |
+| [NC-10]| Use SMTChecker  | - |
+| [NC-11]| Constants on the left are better | 20 |
+| [NC-12]| Assembly Codes Specific – Should Have Comments  | 18 |
+| [NC-13]| Take advantage of Custom Error’s return value property  | 4 |
+| [NC-14]| Use constants instead of using numbers directly without explanations  | 6 |
+| [NC-15]| Shorthand way to write if / else statement | 4 |
+| [NC-16]| For critical changes should emit both old and new values  | 1 |
+| [NC-17]| Don't use named return variables its confusing  | 8 |
+| [NC-18]| NON-LIBRARY/INTERFACE FILES SHOULD USE FIXED COMPILER VERSIONS, NOT FLOATING ONES  | 7 |
+| [NC-19]| Constants should be in uppercase   | 7 |
+| [NC-20]| TYPOS  | 4 |
+| [NC-21]| Contracts should have full test coverage  | - |
+| [NC-22]| Use named parameters for mapping type declarations  | 3 |
+| [NC-23]| File does not contain an SPDX Identifier   | 4 |
+| [NC-24]| declaration shadows an existing declaration  | - |
+| [NC-25]| Event is missing indexed fields  | 2 |
+
+
 ##
 
 ## [L-1] Use abi.encode to convert safest way from uint values to bytes
@@ -947,21 +994,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/algorithms/P256SHA256Algorithm.sol
 
 https://github.com/code-423n4/2023-04-ens/blob/45ea10bacb2a398e14d711fe28d1738271cd7640/contracts/utils/HexUtils.sol#L25-L36
 
-```solidity
 
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
-
-```solidity
-
-```
 
 ##
 
@@ -1172,7 +1205,7 @@ FILE: 2023-04-ens/contracts/dnssec-oracle/DNSSECImpl.sol
 ```
 ##
 
-## [NC-22] Contracts should have full test coverage
+## [NC-21] Contracts should have full test coverage
 
 While 100% code coverage does not guarantee that there are no bugs, it often will catch easy-to-find bugs, and will ensure that there are fewer regressions when the code invariably has to be modified. Furthermore, in order to get full coverage, code authors will often have to re-organize their code so that it is more modular, so that each component can be tested separately, which reduces interdependencies between modules and layers, and makes for code that is easier to reason about and audit
 
@@ -1260,35 +1293,3 @@ FILE: 2023-04-ens/contracts/dnsregistrar/DNSRegistrar.sol
 
 
 
-LOW‑1	Low Level Calls With Solidity Version 0.8.14 Can Result In Optimiser Bug	2
-LOW‑2	Contracts are not using their OZ Upgradeable counterparts	2
-LOW‑3	Pragma Experimental ABIEncoderV2 is Deprecated	1
-LOW‑4	Remove unused code	2
-LOW‑5	require() should be used instead of assert()	3
-LOW‑6	Admin privilege - A single point of failure can allow a hacked or malicious owner use critical functions in the project	1
-LOW‑7	Upgrade OpenZeppelin Contract Dependency	1
-
-NC‑1	Add a timelock to critical functions	3
-NC‑2	Avoid Floating Pragmas: The Version Should Be Locked	17
-NC‑3	Variable Names That Consist Of All Capital Letters Should Be Reserved For Const/immutable Variables	2
-NC‑4	Constants in comparisons should appear on the left side	9
-NC‑5	Critical Changes Should Use Two-step Procedure	3
-NC‑6	Declare interfaces on separate files	1
-NC‑7	Duplicated require()/revert() Checks Should Be Refactored To A Modifier Or Function	2
-NC‑8	Function writing that does not comply with the Solidity Style Guide	19
-NC‑9	Use delete to Clear Variables	3
-NC‑10	Imports can be grouped together	44
-NC‑11	NatSpec return parameters should be included in contracts	1
-NC‑12	No need to initialize uints to zero	7
-NC‑13	Initial value check is missing in Set Functions	3
-NC‑14	Contracts should have full test coverage	1
-NC‑15	Implementation contract may not be initialized	3
-NC‑16	NatSpec comments should be increased in contracts	1
-NC‑17	Non-usage of specific imports	44
-NC‑18	Use a more recent version of Solidity	19
-NC‑19	Omissions in Events	1
-NC‑20	Open TODOs	3
-NC‑21	Using >/>= without specifying an upper bound is unsafe	1
-NC‑22	Public Functions Not Called By The Contract Should Be Declared External Instead	4
-NC‑23	require() / revert() Statements Should Have Descriptive Reason Strings	13
-NC‑24	Use bytes.concat()	8
