@@ -49,7 +49,7 @@ mitigation: use a if/require command to perform the check `len<src.length && src
 }
 ```
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/BytesUtils.sol#L387
-mitigation: use a if/require command to perform the check `off>self.length>0`
+mitigation: use a if/require command to perform the check `off<self.length`
 
 ### [L-02]  missing zero address checks while assigning variables 
 ```solidity
