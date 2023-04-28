@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "ks__xxxxx",
+  "risk": "3",
+  "title": "Missing important check in getOwnerAddress() function in DNSClaimChecker.sol",
+  "issueId": 284,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/284"
+}
