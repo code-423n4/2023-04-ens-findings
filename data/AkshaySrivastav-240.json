@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "AkshaySrivastav",
+  "risk": "2",
+  "title": "`HexUtils.hexStringToBytes32` does not exclude the last index in `str`",
+  "issueId": 240,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/240"
+}
