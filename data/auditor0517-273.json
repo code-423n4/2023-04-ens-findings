@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "auditor0517",
+  "risk": "2",
+  "title": "EllipticCurve.isOnCurve returns false for x = 0 or x = p",
+  "issueId": 273,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/273"
+}
