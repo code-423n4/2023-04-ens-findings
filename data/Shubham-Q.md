@@ -16,7 +16,7 @@
 | [NC-3](#NC-3) | Inconsistent spacing in comments | 3 |
 | [NC-4](#NC-4) | Unused variables | 2 |
 | [NC-5](#NC-5) | Assembly Codes Specific – Should Have Comments | 12 |
-
+| [NC-6](#NC-6) | Unused struct | 1 |
 
 
 ## [L-01] Update codes to avoid Compile Errors
@@ -654,3 +654,18 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/Byte
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/BytesUtils.sol#L311
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/SHA1.sol#L7-L239
+
+
+## [NC-6] Unused struct
+
+```solidity
+File: contracts/dnsregistrar/DNSRegistrar.sol
+
+L:40    struct OwnerRecord {
+         bytes name;
+         address owner;
+         address resolver;
+         uint64 ttl;
+        }
+```
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSRegistrar.sol#L40-L45
