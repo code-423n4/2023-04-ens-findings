@@ -236,17 +236,17 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSCl
 ```
 import "../dnssec-oracle/DNSSEC.sol";
 ```
-## DIVISION BY ZERO
-It is recommended implementing the zero division check in a function code logic whenever possible.
+## PRECISION ISSUE
+It is recommended scaling the numerator of a division/ratio whenever possible to avoid truncation involving small integers.
 
-Here is 1 instance found pertaining to the ratio of `r1/r2`. Apparently, the modulus check could possibly lead to zero division issue. For instance,
+Here is 1 instance found pertaining to the ratio of `r1/r2`. 
 
 u = 5
-m = 1
-u = 5 % 1 = 0
-r1 = m = 1
-r2 = u = 0
-q = r1/r2 = 1/0 = undefined
+m = 3
+u = 5 % 3 = 2
+r1 = m = 3
+r2 = u = 2
+q = r1/r2 = 3/2 = 1.5 = 1
 
 https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/algorithms/EllipticCurve.sol#L40-L60
 
@@ -272,4 +272,162 @@ https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/algo
             return uint256(t1);
         }
     }
+```
+## GLOBAL VARIABLES UTILIZATION
+It is recommended using the global variables rather than inputting its equivalent in the function argument.
+
+Here is 1 instance found pertaining to `now` that could have been omitted and replaced by `block.timestamp` in the function logic.
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/DNSSECImpl.sol#L140-L174
+
+```
+    function validateSignedSet(
+        RRSetWithSignature memory input,
+        bytes memory proof,
+        uint256 now
+    ) internal view returns (RRUtils.SignedSet memory rrset) {
+        rrset = input.rrset.readSignedSet();
+
+        // Do some basic checks on the RRs and extract the name
+        bytes memory name = validateRRs(rrset, rrset.typeCovered);
+        if (name.labelCount(0) != rrset.labels) {
+            revert InvalidLabelCount(name, rrset.labels);
+        }
+        rrset.name = name;
+
+        // All comparisons involving the Signature Expiration and
+        // Inception fields MUST use "serial number arithmetic", as
+        // defined in RFC 1982
+
+        // o  The validator's notion of the current time MUST be less than or
+        //    equal to the time listed in the RRSIG RR's Expiration field.
+        if (!RRUtils.serialNumberGte(rrset.expiration, uint32(now))) {
+            revert SignatureExpired(rrset.expiration, uint32(now));
+        }
+
+        // o  The validator's notion of the current time MUST be greater than or
+        //    equal to the time listed in the RRSIG RR's Inception field.
+        if (!RRUtils.serialNumberGte(uint32(now), rrset.inception)) {
+            revert SignatureNotValidYet(rrset.inception, uint32(now));
+        }
+
+        // Validate the signature
+        verifySignature(name, rrset, input, proof);
+
+        return rrset;
+    }
+```  
+## SANITY CHECKS
+Zero address and zero value checks at the constructor could avoid human errors leading to non-functional calls associated with the mistakes. This is especially so when the essential instants and variables are devoid of their respective setters that could end up having had to redeploy the contract. 
+
+Here is 1 instance found.
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnsregistrar/DNSRegistrar.sol#L55-L68
+
+```
+    constructor(
+        address _previousRegistrar,
+        address _resolver,
+        DNSSEC _dnssec,
+        PublicSuffixList _suffixes,
+        ENS _ens
+    ) {
+        previousRegistrar = _previousRegistrar;
+        resolver = _resolver;
+        oracle = _dnssec;
+        suffixes = _suffixes;
+        emit NewPublicSuffixList(address(suffixes));
+        ens = _ens;
+    }
+```
+## POTENTIAL DDOS
+The use of `gas()` in the function logic of `modexp()` could possibly lead to DoS attack due to running out of gas. Apparently, a function call utilizing this library method could use up a major part of the gas depriving `staticcall()` of the needed fuel to execute. It is recommended allowing the caller to specify a beyond threshold gas limit for the successful execution of the library method.
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/algorithms/ModexpPrecompile.sol#L7-L33
+
+```
+    function modexp(
+        bytes memory base,
+        bytes memory exponent,
+        bytes memory modulus
+    ) internal view returns (bool success, bytes memory output) {
+        bytes memory input = abi.encodePacked(
+            uint256(base.length),
+            uint256(exponent.length),
+            uint256(modulus.length),
+            base,
+            exponent,
+            modulus
+        );
+
+        output = new bytes(modulus.length);
+
+        assembly {
+            success := staticcall(
+                gas(),
+                5,
+                add(input, 32),
+                mload(input),
+                add(output, 32),
+                mload(modulus)
+            )
+        }
+    }
+```
+## THE USE OF SHA-1
+SHA-1 is comparatively a weak hashing algorithm due to issues pertaining to collision attacks. It is recommended adopting a more secure hashing algorithms like SHA-256 or SHA-3.
+
+Here is 1 contract instance found.
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/digests/SHA1Digest.sol#L10-L22
+
+```
+contract SHA1Digest is Digest {
+    using BytesUtils for *;
+
+    function verify(
+        bytes calldata data,
+        bytes calldata hash
+    ) external pure override returns (bool) {
+        require(hash.length == 20, "Invalid sha1 hash length");
+        bytes32 expected = hash.readBytes20(0);
+        bytes20 computed = SHA1.sha1(data);
+        return expected == computed;
+    }
+}
+```
+## SPDX LICENSE IDENTIFIER
+It is recommended including the `SPDX-License-Identifier` in all contracts whenever possible.
+
+Here are some of the contract instances found.
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/RRUtils.sol
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/algorithms/EllipticCurve.sol
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/BytesUtils.sol
+  
+## USE CONSTANTS OVER MAGIC NUMBERS
+Constants should be used rather than magic numbers in the codebase.
+
+Here are some of the instances found.
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/RRUtils.sol#L395
+
+```
+                        0xFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00) >>
+```
+
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/RRUtils.sol#L398
+
+```
+                    0x00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF);
+```
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/RRUtils.sol#L402
+
+```
+                    0x0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF) +
+```
+https://github.com/code-423n4/2023-04-ens/blob/main/contracts/dnssec-oracle/RRUtils.sol#L404
+
+```
+                    0xFFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000) >>
 ```
