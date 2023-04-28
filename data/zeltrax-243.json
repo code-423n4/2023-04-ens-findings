@@ -1,0 +1,8 @@
+{
+  "contest": 232,
+  "handle": "zeltrax",
+  "risk": "2",
+  "title": " The resolver address is redeclared in the \"proveAndClaimWithResolver\" function, which may cause a potential vulnerability.",
+  "issueId": 243,
+  "issueUrl": "https://github.com/code-423n4/2023-04-ens-findings/issues/243"
+}
